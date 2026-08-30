@@ -1,0 +1,580 @@
+\documentclass[11pt, a4]{article} 
+\usepackage[]{amsmath, amssymb, amsfonts, amsthm} 
+\allowdisplaybreaks
+\usepackage[margin = 1in]{geometry} 
+% \usepackage[]{float} 
+\usepackage[shortlabels]{enumitem} 
+\usepackage[]{mathtools} 
+
+\NewDocumentCommand{\regsub}{}{1.23\dots p}
+\NewDocumentCommand{\Var}{}{\operatorname{Var}}
+\NewDocumentCommand{\Cov}{}{\operatorname{Cov}}
+\RenewDocumentCommand{\implies}{}{\Rightarrow}
+
+\parindent 0pt
+% \pagestyle{empty}
+
+\title{Multiple Linear Regression}
+\author{Notes by Moutushi Chatterji \LaTeX ed by Sathvik H S}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Introduction}
+\begin{enumerate}[1.]
+	\item Multiple Regression is appropriate when research problem 
+		involves a single dependent variable presumed to be related to
+		two or more independent variables.
+	\item The objective is to predict changes in dependent variable in 
+		response to changes in independent variables.
+\end{enumerate}
+
+\subsection*{Some Examples}
+\begin{itemize}
+	\item While estimating / predicting amount of a particular crop
+		production in a year, one should take into account the effect
+		of amount of rainfall, average humidity, natural soil fertility
+		and so on.
+	\item Monthly expenditure on dining out (DV) can be predicted
+		from information regarding Family Income, Family Size and
+		Age of the head of the family.
+	\item Company’s sales can be predicted from information on its
+		expenditure on ads, number of sales people and number of
+		retail outlets carrying its product.
+\end{itemize}
+
+\section*{Derivation}
+Suppose we have $ p $ variables $ x_1, x_2, \ldots, x_p $ and there are $ n $ values collected on each of the $ p $ variables as 
+$ \left( x_{1\alpha}, x_{2\alpha}, \ldots, x_{p\alpha} \right) $, for $ \alpha = 1, 2, \ldots, n $. \footnote{Often the shorthand \( 1(1)n \) is used to represent the sequence \( 1, 2, \dots, n \) with the general syntax for shorthand being \texttt{start(step)end}. We will stick with the latter notation throughout.}
+
+Here our objective is to predict any one of these $ p $ variables on the basis of the rest.
+
+Without loss of generality, let us suppose that we want to estimate or predict $ x_1 $ in terms of $ x_2, x_3, \ldots, x_p $.
+So $ x_1 $ must be expressed as some mathematical function of $ x_2, x_3, \ldots, x_p $.
+
+For our purpose, we only restrict ourselves to the linear mathematical function of $ x_2, x_3, \ldots, x_p $ like 
+\begin{equation} 
+x_1 = a_0 + a_2 \left( x_2 - \bar{x}_2 \right) + a_3 \left( x_3 - \bar{x}_3 \right) + \dots + a_p \left( x_p - \bar{x}_p \right)
+\end{equation} 
+where $ \bar{x}_i = \frac{ 1 }{ n } \sum_{\alpha = 1}^n x_{i\alpha} $ for $ i = 2, 3, \ldots, p $ and $ a_0, a_2, a_3, \ldots, a_p $ are unknown
+constants which need to be estimated on the basis of the given data with the help of \textit{method of least squares}.
+
+We assume the following linear model for the purpose of the
+estimation of the unknown constants $ a_0, a_2, \ldots, a_p $:
+
+\begin{align}
+	x_1 &= X_{\regsub} + e_{\regsub} \\
+	\implies x_{1\alpha} &= X_{\regsub\alpha} + e_{\regsub\alpha}, \alpha = 1, 2, \ldots, n
+\end{align}
+
+Here, 
+\begin{equation}
+	X_{\regsub\alpha} = a_0 + a_2 \left( x_{2\alpha} - \bar{x}_2 \right) + a_3 \left( x_{3\alpha} - \bar{x}_3 \right) + \ldots + a_p \left( x_{p\alpha} - \bar{x}_p \right) 
+\end{equation}
+
+and $ e_{1.23..p\alpha} $ is the error involved in estimating the $ \alpha ^{\text{th}} $ value of $ x_1 $ on the basis of $ x_2, x_3, \ldots, x_p $.
+
+We now follow the method of least squares to estimate the unknown constants $ a_0, a_2, a_3, \ldots, a_p $.
+As the name suggests, we want to minimize
+
+\begin{equation}
+	\Delta_1 = \sum_{\alpha = 1}^{n} e_{\regsub\alpha}^{2} = \sum_{\alpha = 1}^{n} \{ x_{1\alpha} - a_0 - a_2 \left( x_{2\alpha} - \bar{x}_2 \right) - a_3 \left( x_{3\alpha} - \bar{x}_3 \right) - \ldots - a_p \left( x_{p\alpha} - \bar{x}_p \right) \}
+\end{equation}
+
+with respect to the constants $ a_0, a_2, a_3, \ldots, a_p $.
+
+\subsection*{Derivation Using the Dispersion Matrix}
+
+Now, $ \frac{\partial \Delta_{1}}{\partial a_0} = -2 \sum_{\alpha = 1}^{n} \{ x_{1\alpha} - a_0 - a_2 \left( x_{2\alpha} - \bar{x}_2 \right) - a_3 \left( x_{3\alpha} - \bar{x}_3 \right) - \ldots - a_p \left( x_{p\alpha} - \bar{x}_p \right) \}$
+
+Setting $ \frac{\partial \Delta_1}{\partial a_0} = 0 $, we get
+
+\begin{align}
+	0 &= \sum_{\alpha = 1}^{n} \{ x_{1\alpha} - a_0 - a_2 \left( x_{2\alpha} - \bar{x}_2 \right) - a_3 \left( x_{3\alpha} - \bar{x}_3 \right) - \ldots - a_p \left( x_{p\alpha} - \bar{x}_p \right) \} \nonumber \\
+	\implies a_0 &= \frac{ 1 }{ n } \sum_{\alpha = 1}^{n} \{x_{1\alpha} - a_2 \left( x_{2\alpha} - \bar{x}_2 \right) - a_3 \left( x_{3\alpha} - \bar{x}_3 \right) - \ldots - a_p \left( x_{p\alpha} - \bar{x}_p \right) \} \nonumber \\
+	\implies a_0 &= \frac{ 1 }{ n } \sum_{\alpha = 1}^{n} x_{1\alpha} = \bar{x}_1 \footnotemark 
+\end{align}
+\footnotetext{ Since $\sum_{\alpha = 1}^{n} \left( x_{i\alpha} - \bar{x}_i \right) = 0, i = 2, 3, \ldots, p$. This is true in general, i.e, \textit{sum of deviation about the mean} is always zero and we will use this fact frequently.} 
+
+Now, for any $ k = 2, 3, \ldots, p $,
+$$ \frac{\partial \Delta_{1}}{\partial a_k} = -2 \sum_{\alpha = 1}^{n} \{ x_{1\alpha} - \bar{x}_1 - a_2 \left( x_{2\alpha} - \bar{x}_2 \right) - a_3 \left( x_{3\alpha} - \bar{x}_3 \right) - \ldots - a_p \left( x_{p\alpha} - \bar{x}_p \right) \} \left( x_{k\alpha} - \bar{x}_k \right) $$
+
+Note that, the value of $a_0$ is substituted as $ \bar{x}_1 $ in the above expression.
+Setting $ \frac{\partial \Delta_1}{\partial a_k} = 0 $ gives us
+
+$$    \sum_{\alpha = 1}^{n}\{ x_{1\alpha} - \bar{x}_1 - a_2 \left( x_{2\alpha} - \bar{x}_2 \right) - a_3 \left( x_{3\alpha} - \bar{x}_3 \right) - \ldots - a_p \left( x_{p\alpha} - \bar{x}_p \right) \} \left( x_{k\alpha} - \bar{x}_k \right) = 0 $$
+\begin{align}
+	\implies \sum_{\alpha = 1}^{n} \left( x_{1\alpha} - \bar{x}_1 \right) \left( x_{k\alpha} - \bar{x}_k \right) &= \sum_{j=2}^{p}a_j \sum_{\alpha = 1}^{n} \left( x_{j\alpha} - \bar{x}_j \right) \left( x_{k\alpha} - \bar{x}_k \right) \nonumber \\
+	\implies s_{1k} &= \sum_{j=2}^{p} a_js_{jk}, \quad k = 2, 3, \ldots, p \label{normal_eq}
+\end{align}
+where $ s_{ij} = \sum_{\alpha = 1}^{n} \left( x_{i\alpha} - \bar{x}_i \right) \left( x_{j\alpha} - \bar{x}_j \right) $ for every $ i, j = 1, 2, \ldots, p$.
+
+The collection of equations \eqref{normal_eq}, \footnote{These equations are collectively called \textit{the normal equations}. They will be used extensively while deriving extra results/observations.}
+\begin{align*}
+	s_{12} &= a_2s_{22} + a_3s_{32} + \ldots + a_ps_{p2} \\
+	s_{13} &= a_2s_{23} + a_3s_{33} + \ldots + a_ps_{p3} \\
+	       &\vdotswithin{=} \hspace{0.5in} \vdots \hspace{0.5in} \ddots \\
+	s_{1p} &= a_2s_{2p} + a_3s_{3p} + \ldots + a_ps_{pp} 
+\end{align*}
+can be written concisely in matrix for as 
+$$\begin{pmatrix}
+    s_{12} \\
+    s_{13} \\
+    \vdots \\
+    s_{1p}
+\end{pmatrix}
+=
+\begin{pmatrix}
+    s_{22} & s_{32} & \cdots & s_{p2} \\
+    s_{23} & s_{33} & \cdots & s_{p3} \\
+    \vdots & \vdots & \ddots & \vdots \\
+    s_{2p} & s_{3p} & \cdots & s_{pp}
+\end{pmatrix}
+\begin{pmatrix}
+    a_2 \\
+    a_3 \\
+    \vdots \\
+    a_p
+\end{pmatrix}$$
+\begin{equation}
+	\implies \mathbf{s}_1 = S^{*}\mathbf{a}
+\end{equation}
+
+With the assumption of non-singularity of the distribution, we have $ |S^{*}| \neq 0$, since $ S^{*} $ is equivalent to the dispersion matrix of $ x_2, x_3, \ldots, x_p $.
+
+Now, applying \textit{Cramer's rule}, we get
+
+\[ \hat{a}_j = \frac{ 1 }{ |S^{*}| } 
+\begin{vmatrix}
+	s_{22} & \cdots & s_{j-1,2} & s_{12} & s_{j+1, 2} & \cdots & s_{p2} \\
+	s_{23} & \cdots & s_{j-1,3} & s_{13} & s_{j+1, 3} & \cdots & s_{p3} \\
+	\vdots & \ddots & \vdots & \vdots & \vdots & \ddots & \vdots \\
+	s_{2p} & \cdots & s_{j-1,p} & s_{1p} & s_{j+1, p} & \cdots & s_{pp} \\
+\end{vmatrix}
+\] 
+
+Now let us define the corrected SS-SP matrix\footnote{Sum of Squares-Sum of Products matrix} of $ x_1, x_2, x_3, \ldots, x_p $ as
+\[ S = 
+\begin{pmatrix}
+	s_{11} & s_{21} & \ldots & s_{p1} \\
+	s_{12} & s_{22} & \ldots & s_{p2} \\
+	\vdots & \vdots & \ddots & \vdots \\
+	s_{1p} & s_{2p} & \ldots & s_{pp} \\
+\end{pmatrix}\] 
+
+where $ s_{ij} = \sum_{\alpha = 1}^{n} \left( x_{i\alpha} - \bar{x}_i \right) \left( x_{j\alpha} - \bar{x}_j \right) $ for every $ i, j = 1, 2, \ldots, p$ (as defined previously). 
+Also let $ S_{ij} $ be the cofactor of S corresponding to $ s_{ij} $.
+Then,
+\[ S_{11} = (-1)^{1+1} 
+\begin{vmatrix}
+	s_{22} & s_{32} & \ldots & s_{p2} \\
+	s_{23} & s_{33} & \ldots & s_{p3} \\
+	\vdots & \vdots & \ddots & \vdots \\
+	s_{2p} & s_{3p} & \ldots & s_{pp} \\
+\end{vmatrix} = |S^{*}| \]
+
+Now, 
+\begin{align*}
+\begin{vmatrix}
+	s_{22} & \cdots & s_{j-1,2} & s_{12} & s_{j+1, 2} & \cdots & s_{p2} \\
+	s_{23} & \cdots & s_{j-1,3} & s_{13} & s_{j+1, 3} & \cdots & s_{p3} \\
+	\vdots & \ddots & \vdots & \vdots & \vdots & \ddots & \vdots \\
+	s_{2p} & \cdots & s_{j-1,p} & s_{1p} & s_{j+1, p} & \cdots & s_{pp} \\
+\end{vmatrix} &= (-1)^{j-2} 
+\begin{vmatrix}
+	s_{12} & s_{22} & \cdots & s_{j-1,2} & s_{j+1, 2} & \cdots & s_{p2} \\
+	s_{13} & s_{23} & \cdots & s_{j-1,3} & s_{j+1, 3} & \cdots & s_{p3} \\
+	\vdots & \ddots & \vdots & \vdots & \vdots & \ddots & \vdots \\
+	s_{1p} & s_{2p} & \cdots & s_{j-1,p} & s_{j+1, p} & \cdots & s_{pp} \\
+\end{vmatrix} \\
+&= (-1)^{j-2} (-1)^{1+j}S_{1j} = -S_{1j}
+\end{align*}
+
+The first equality above follows as we need $ j-2 $ column swaps to move $ \mathbf{s}_1 $ to the left. The second equality follows since the determinant is exactly equal to $ (-1)^{1+j} S_{1j} $.\footnote{ $S_{1j} $ was defined to be equal to $(-1)^{1+j}$ times the determinant of interest.}
+
+Therefore, we have 
+\begin{equation}
+	\hat{a}_j = -\frac{ S_{1j} }{ S_{11}}, \quad j = 2, 3, \ldots, p
+\end{equation}
+
+So the multiple linear regression equation of $ x_1 $ on $ x_2, x_3, \ldots, x_p $ is,
+\begin{align}
+	x_{\regsub} &= \bar{x}_1 - \frac{ S_{12} }{ S_{11} } \left( x_2 - \bar{x}_2 \right) - \frac{ S_{13} }{ S_{11} } \left( x_3 - \bar{x}_3 \right) - \ldots - \frac{ S_{1p} }{ S_{11} } \left( x_p - \bar{x}_p \right) \nonumber \\
+	\implies x_{\regsub} &= \bar{x}_1 - \sum_{j=2}^{p} \frac{ S_{1j} }{ S_{11} } \left( x_j - \bar{x}_j \right) 
+\end{align}
+
+If we denote $ x_{\regsub} $ as $ x_1 $, we get another form of the above equation:
+\begin{align}
+	- \sum_{j=2}^{p} \frac{ S_{1j} }{ S_{11} } \left( x_j - \bar{x}_j \right) &= x_1 - \bar{x}_1 \nonumber \\
+	\implies  \sum_{j=1}^{p} { S_{1j} } \left( x_j - \bar{x}_j \right) &= 0
+\end{align}
+
+\subsection*{Alternative Derivation Using the Correlation Matrix}
+
+Let $ r_{ij} $ be the simple product moment correlation coefficient between the variables $ x_i $ and $ x_j $ for every \mbox{$ i, j = 1, 2, \ldots, p $}. 
+Note that $ r_{ii} = 1 $ for every $ i = 1, 2, \ldots, p $.
+
+We also know that, $ r_{ij} = \frac{ s_{ij} }{ s_is_j } $ for every $ i, j = 1, 2, \ldots, p $ where $ s_{i}^{2} = s_{ii} = \sum_{\alpha = 1}^{n} \left( x_{i\alpha} - \bar{x}_i \right) ^{2} $.
+\begin{equation}
+	\implies s_{ij} = r_{ij}s_is_j ; \quad i, j = 1, 2, \dots, p  \label{cov-cor_eq}
+\end{equation}
+
+Thus the cofactor of with respect to the element $ s_{ij} $ of the matrix $ S $ is 
+\begin{gather}
+	S_{ij} = (-1)^{i+j}
+\begin{vmatrix}
+	s_{11} & s_{21} & \cdots & s_{j-1,1} & s_{j+1, 1} & \cdots & s_{p1} \\
+	s_{12} & s_{22} & \cdots & s_{j-1,2} & s_{j+1, 2} & \cdots & s_{p2} \\
+	\vdots & \ddots & \vdots & \vdots & \vdots & \ddots & \vdots \\
+	s_{1,i-1} & s_{2,i-1} & \cdots & s_{j-1,i-1} & s_{j+1,i-1} & \cdots & s_{p,i-1} \\
+	s_{1,i+1} & s_{2,i+1} & \cdots & s_{j-1,i+1} & s_{j+1,i+1} & \cdots & s_{p,i+1} \\
+	\vdots & \ddots & \vdots & \vdots & \vdots & \ddots & \vdots \\
+	s_{1p} & s_{2p} & \cdots & s_{j-1,p} & s_{j+1, p} & \cdots & s_{pp} \\
+\end{vmatrix} \nonumber \\
+       = (-1)^{i+j} s_{1}^{2} \cdots s_{i-1}^{2}s_{i}s_{i+1}^{2} \cdots s_{j-1}^{2}s_{j}s_{j+1}^{2} \cdots s_{p}^{2}
+\begin{vmatrix}
+	1 & r_{21} & \cdots & r_{j-1,1} & r_{j+1, 1} & \cdots & r_{p1} \\
+	r_{12} & 1 & \cdots & r_{j-1,2} & r_{j+1, 2} & \cdots & r_{p2} \\
+	\vdots & \ddots & \vdots & \vdots & \vdots & \ddots & \vdots \\
+	r_{1,i-1} & r_{2,i-1} & \cdots & r_{j-1, i-1} & r_{j+1,i-1} & \cdots & r_{p,i-1} \\
+	r_{1,i+1} & r_{2,i+1} & \cdots & r_{j-1,i+1} & r_{j+1, i+1} & \cdots & r_{p,i+1} \\
+	\vdots & \ddots & \vdots & \vdots & \vdots & \ddots & \vdots \\
+	r_{1p} & r_{2p} & \cdots & r_{j-1,p} & r_{j+1, p} & \cdots & 1 \\
+\end{vmatrix}
+\end{gather}
+
+If we take the correlation matrix to be $ R $ i.e,
+\[ R = \begin{pmatrix}
+	1 & r_{21} & \ldots & r_{p1} \\
+	r_{12} & 1 & \ldots & r_{p2} \\
+	\vdots & \vdots & \ddots & \vdots \\
+	r_{1p} & r_{2p} & \ldots & 1
+\end{pmatrix} \] 
+
+and take $ R_{ji} $ to be the cofactor of $ (i,j)^{\text{th}} $ element of $ R $, then we have
+\begin{equation}
+	S_{ij} = (-1)^{i+j} s_{1}^{2} \cdots s_{i-1}^{2}s_{i}s_{i+1}^{2} \cdots s_{j-1}^{2}s_{j}s_{j+1}^{2} \cdots s_{p}^{2} (-1)^{i+j} R_{ij}; i, j = 1, 2, \ldots, p
+\end{equation}
+
+This gives 
+\begin{equation}
+	\hat{a}_j = - \frac{ S_{1j} }{ S_{11} } = - \frac{ s_1 }{ s_j } \cdot \frac{ R_{1j} }{ R_{11} } , j = 2, 3, \ldots, p \label{coeff_eq}
+\end{equation} 
+
+Hence, the multiple linear regression equation now becomes 
+\begin{align}
+	x_{\regsub} &= \bar{x}_1 - \frac{ s_1R_{12} }{ s_2R_{11} }\left( x_2 - \bar{x}_2 \right) - \frac{ s_1R_{13} }{ s_3R_{11} }\left( x_3 - \bar{x}_3 \right) - \ldots - \frac{ s_1R_{1p} }{ s_pR_{11} }\left( x_p - \bar{x}_p \right) \nonumber \\
+			 &= \bar{x}_1 - \sum_{j=2}^{p} \frac{ s_1R_{1j} }{ s_jR_{11} }\left( x_j - \bar{x}_j \right) 
+\end{align}
+
+\section*{Key Properties and Remarks}
+\begin{enumerate}[1.]
+	\item Usually, $ \hat{a}_j $ is denoted as $ b_{1j.2,\dots,j-1, j+1, \dots, p} $, where $ b_{1j.2,\dots,j-1, j+1, \dots, p} $ is called \textit{partial regression coefficient} of $ x_1 $ on $ x_j $ when other variables are kept fixed.
+		The simple reason for this is 
+\[ \frac{\partial X_{\regsub}}{\partial x_j} = a_j\] 
+In other words, $ x_1 $ increases $ a_j $ units for unit increase in $ x_j $ when other variables are kept fixed.
+
+        \item Predicted mean of $ x_1 $ is equal to the observed mean of $ x_1 $.
+		\begin{equation}
+			\bar{X}_{\regsub} = \bar{x}_1 \label{equal_mean}
+		\end{equation}
+	\begin{proof}
+	    \begin{align*}
+		    X_{\regsub\alpha} &= \bar{x}_1 + \hat{a}_2 \left( x_{2\alpha} - \bar{x}_2 \right) + \hat{a}_3 \left( x_{3\alpha} - \bar{x}_3 \right) + \ldots + \hat{a}_p \left( x_{p\alpha} - \bar{x}_p \right) \notag \\
+		    \implies \frac{ 1 }{ n } \sum_{\alpha = 1}^{n}		    X_{\regsub\alpha} &= \frac{ 1 }{ n } \sum_{\alpha = 1}^{n}	\bar{x}_1 + \hat{a}_2 \frac{ 1 }{ n } \sum_{\alpha = 1}^{n}	\left( x_{2\alpha} - \bar{x}_2 \right) + \ldots + \hat{a}_p \frac{ 1 }{ n } \sum_{\alpha = 1}^{n}	\left( x_{p\alpha} - \bar{x}_p \right) \notag \\
+		    \implies \bar{X}_{\regsub} &= \bar{x}_1 
+	    \end{align*}
+	\end{proof}
+
+	\item The mean of residuals or equivalently sum of residuals is zero.
+		\begin{equation}
+			\bar{e}_{\regsub} = 0 \label{zero_resid_mean}
+		\end{equation} 
+	\begin{proof}
+	    \begin{align}
+	        x_{1} &= X_{\regsub} + e_{\regsub} \notag \\
+		\implies \bar{x}_{1} &= \overline{X}_{\regsub} + \bar{e}_{\regsub} \notag \\
+		\implies \bar{e}_{\regsub} &= 0 \tag*{(from \eqref{equal_mean})}
+	\end{align}
+\end{proof}
+\end{enumerate}
+
+\section*{Sum of Squares of Errors (SSE)}
+
+By definition we know that,
+\[ SSE = \min_{a_{0}, a_2, \dots, a_p} \Delta_{1} = \sum_{\alpha = 1}^{n} \left\{ x_{1 \alpha} - \hat{a}_{0} - \hat{a}_2 \left( x_{2 \alpha } - \bar{x}_{2} \right)  - \hat{a}_3 \left( x_{3 \alpha } - \bar{x}_{3} \right) - \dots - \hat{a}_p \left( x_{p \alpha } - \bar{x}_{p} \right)\right\} ^{2} \] 
+
+Therefore, we can derive the expression for SSE as follows:
+\begin{align*}
+	SSE &= \sum_{\alpha = 1}^{n} \left\{ x_{1 \alpha} - \bar{x}_{1} - \sum_{j=2}^{p} \hat{a}_{j} \left( x_{j \alpha} - \bar{x}_{j} \right)  \right\} 
+    \left\{ x_{1\alpha} - \bar{x}_1 - \sum_{k=2}^{p} \hat{a}_k \left( x_{k\alpha} - \bar{x}_k \right)  \right\} \\
+	    &= \sum_{\alpha = 1}^{n} \left[ \left( x_{1\alpha} - \bar{x}_1 \right) ^{2} 
+	    - \sum_{k=2}^{p}\hat{a}_k \left( x_{1\alpha} - \bar{x}_1 \right) \left( x_{k\alpha} - \bar{x}_k \right) 
+    - \sum_{j=2}^{p} \hat{a}_j \left( x_{j\alpha} - \bar{x}_j \right) 
+    \left\{ x_{1\alpha} - \bar{x}_1 - \sum_{k=2}^{p} \hat{a}_k \left( x_{k\alpha} - \bar{x}_k \right)  \right\} \right] \\
+	    &= s_{1}^{2} - \sum_{k=2}^{p} \hat{a}_k s_{1k} - \sum_{j= 2}s_{p} \hat{a}_j \left\{ s_{1j} - \sum_{k=2}^{p} \hat{a}_k s_{jk} \right\} \\
+	    &= s_{1}^{2} - \sum_{k=2}^{p} \hat{a}_k s_{1k} \tag*{(from \eqref{normal_eq})} \\
+		    &= s_1^2 + \sum_{k=2}^{p} \frac{ s_1 R_{1k} }{ s_k R_{11}  } \cdot r_{1k} s_1 s_k \tag*{(from \eqref{cov-cor_eq} and \eqref{coeff_eq})} \\
+	    &= \frac{ s_1^2 }{ R_{11} } \left( 1 \cdot R_{11} + \sum_{k=2}^{p} r_{1k}R_{1k} \right) = \frac{ s_1^2 }{ R_{11} } \left( r_{11} \cdot R_{11} + \sum_{k=2}^{p} r_{1k}R_{1k} \right) \tag*{(since \( r_{11} = 1 \))} \\
+	    &= \frac{ s_1^2 }{ R_{11} } \left( \sum_{k=1}^{p} r_{1k}R_{1k} \right)
+\end{align*}
+Since the summation on right-hand side is simply determinant of the matrix $ R $ expanded along the first column, we get the final expression as
+\begin{equation}
+	SSE = \frac{ s_1^2 }{ R_{11} } |R| \label{sse_eq}
+\end{equation}
+
+\section*{Correlation Coefficient in Higher Dimension}
+
+\begin{itemize}
+    \item In biological, physical and social sciences, often data are available on more than two variables and value of one variable seems to be influenced by more than one variables.
+    \item For example, crimes in a city may be influenced by illiteracy, increased population and unemployment in the city, etc.
+    \item The production of a crop may depend upon amount of rainfall, quality of seeds, quantity of fertilizers used and method of irrigation, etc.
+    \item Similarly, performance of students in university exam may depend upon his/her IQ, mother's qualification, father's qualification, parents income, number of hours of studies, etc.
+    \item Whenever we are interested in studying the joint effect of two or more variables on a single variable, multiple correlation gives the solution of our problem.
+    \item For example, sometimes in data analysis, we have certain factors which are influenced by large number of variables. For instance academic achievement is affected by intelligence, number of hours studied, extra coaching, socio-economic status, etc. We can find out the correlation between academic achievement with various other factors as mentioned above using \textit{Multiple Correlation}.
+\end{itemize}
+
+\section*{Multiple Correlation Coefficient}
+
+Multiple correlation coefficient is defined as the simple product moment correlation coefficient between observed values and the predicted values of a (response) variable under multivariate set-up.
+
+If \(x_1\) is expressed as a multiple linear regression equation of \(x_2, x_3, \dots, x_p\), then the corresponding multiple correlation coefficient will be denoted by \(r_{\regsub}\), where
+\begin{equation}
+r_{\regsub} = \frac{\Cov(x_1, X_{\regsub})}{\sqrt{\Var(x_1)} \sqrt{\Var(X_{\regsub})}} 
+\end{equation}
+
+\subsection*{Derivation of the Expression for \(\mathbf{r_{\regsub}}\)}
+
+\begin{enumerate}[1.]
+    \item \begin{equation}
+		    \Cov(X_{\regsub}, e_{\regsub}) = 0 \label{pred_resid_indep}
+    \end{equation}
+   \begin{proof}
+    \begin{align*}
+    \Cov(X_{\regsub}, e_{\regsub}) &= \frac{1}{n} \sum_{\alpha=1}^{n} (X_{\regsub} - \bar{X}_{\regsub})(e_{\regsub} - \bar{e}_{\regsub}) \\
+						 &= \frac{1}{n} \sum_{\alpha=1}^{n} (X_{\regsub} - \bar{X}_{\regsub}) e_{\regsub} \tag*{(from \eqref{zero_resid_mean})} \\
+    &= \frac{1}{n} \sum_{\alpha=1}^{n} \left[ \{ \hat{a}_2 (x_{2\alpha} - \bar{x}_2) + \hat{a}_3 (x_{3\alpha} - \bar{x}_3) + \dots + \hat{a}_p (x_{p\alpha} - \bar{x}_p) \} \right. \\
+    &\quad \left. \{ (x_{1\alpha} - \bar{x}_1) - \hat{a}_2 (x_{2\alpha} - \bar{x}_2) - \hat{a}_3 (x_{3\alpha} - \bar{x}_3) - \dots - \hat{a}_p (x_{p\alpha} - \bar{x}_p) \} \right] \\
+    &= \frac{1}{n} \sum_{\alpha=1}^{n} \left[ \left\{ \sum_{j=2}^{p} \hat{a}_j (x_{j\alpha} - \bar{x}_j) \right\} \left( (x_{1\alpha} - \bar{x}_1) - \sum_{k=2}^{p} \hat{a}_k (x_{k\alpha} - \bar{x}_k) \right) \right] \\
+    &= \frac{1}{n} \sum_{j=2}^{p} \hat{a}_j \sum_{\alpha=1}^{n} \left\{ (x_{1\alpha} - \bar{x}_1)(x_{j\alpha} - \bar{x}_j) - \sum_{k=2}^{p} \hat{a}_k (x_{k\alpha} - \bar{x}_k)(x_{j\alpha} - \bar{x}_j) \right\} \\
+    &= \sum_{j=2}^{p} \hat{a}_j \left( s_{1j} - \sum_{k=2}^{p} \hat{a}_k s_{jk} \right) = 0 \tag*{(from \eqref{normal_eq})}
+    \end{align*}
+   \end{proof}
+
+\item	\begin{equation}
+		\Var(x_{1}) = \Var(X_{\regsub}) + \Var(e_{\regsub}) \label{var_split_eq}
+	\end{equation}
+	   \begin{proof}
+		   Follows directly from \eqref{pred_resid_indep} as
+	       \[
+		       \Var(x_{1}) = \Var(X_{\regsub}) + \Var(e_{\regsub}) + \Cov(X_{\regsub}, e_{\regsub}) \qedhere
+	       \]
+	   \end{proof}
+
+	\item \( \Cov(x_{1}, X_{\regsub}) = \Var(X_{\regsub}) \)
+	\begin{proof}
+	    We use the linear model equation \( x_{1} = X_{\regsub} + e_{\regsub} \) and linearity of covariance in first term to get this result.
+	    \begin{align*}
+		    \Cov(x_{1}, X_{\regsub}) &= \Cov(X_{\regsub} + e_{\regsub}, X_{\regsub}) \\
+							  &= \Cov(X_{\regsub}, X_{\regsub}) + \Cov(X_{\regsub}, e_{\regsub}) \\
+							  &= \Var(X_{\regsub}) \tag*{(from \eqref{pred_resid_indep})}
+	    \end{align*}
+	\end{proof}
+\end{enumerate}
+
+Therefore, using the above observation we have,
+\begin{align}
+	r_{\regsub} &= \frac{\Cov(x_{1}, X_{\regsub})}{\sqrt{\Var(x_{1})} \sqrt{\Var(X_{\regsub})}} \notag \\
+		    &= \sqrt{\frac{\Var(X_{\regsub})}{\Var(x_{1})}} \geq 0 \label{mul_cor1}
+\end{align}
+Also, since \( r_{\regsub} \) is the simple product moment correlation coefficient between \( x_{1} \) and \( X_{\regsub} \), by definition \( r_{\regsub} \leq 1 \). Therefore, \( 0 \leq r_{\regsub} \leq 1 \).
+
+We can simplify the above equation for multiple correlation coefficient as follows.
+\begin{align}
+	\Var(e_{\regsub}) &= \frac{1}{n}\sum_{\alpha=1}^{n} \left( e_{\regsub} - \bar{e}_{\regsub} \right) ^{2} \notag \\
+			  &= \frac{1}{n} \sum_{\alpha=1}^{n} e_{\regsub}^{2} \tag*{(from \eqref{zero_resid_mean})} \\
+			  &= \frac{1}{n} SSE = \frac{1}{n} \frac{s _{1}^{2} \lvert R \rvert }{\lvert R_{11} \rvert} \tag*{(from \eqref{sse_eq})} \\
+			  &= \Var(x_{1}) \frac{\lvert R \rvert}{\lvert R_{11} \rvert} && \text{(since \( s _{1}^{2} = s _{11} = \sum_{\alpha=1}^{n} \left( x_{1\alpha} - \bar{x}_{1} \right) ^{2} \))} \label{var_sse_rel}
+\end{align}
+
+From \eqref{var_split_eq}, we know that, 
+\begin{align*}
+	\Var(x_{1}) &= \Var(X_{\regsub}) + \Var(e_{\regsub}) \\
+	\implies \Var(X_{\regsub}) &= \Var(x_{1}) - \Var(x_{1})\frac{\lvert R \rvert }{\lvert R_{11} \rvert } \\
+			  &= \Var(x_{1})\left( 1 - \frac{\lvert R \rvert }{\lvert R_{11} \rvert } \right) 
+\end{align*}
+
+Therefore, the expression for multiple correlation coefficient is
+\begin{equation}
+	r_{\regsub} = \sqrt{\frac{\Var(X_{\regsub})}{\Var(x_{1})}} = \sqrt{1 - \frac{\lvert R \rvert }{\lvert R_{11} \rvert }}
+\end{equation}
+
+\begin{enumerate}[1., start = 4]
+\item We know that \( 0 \leq r_{\regsub} \leq 1 \) i.e, \( 0 \leq \sqrt{1 - \frac{\lvert R \rvert }{\lvert R_{11} \rvert }} \leq 1 \). This implies that \( 0 \leq \lvert R \rvert \leq \lvert R_{11} \rvert \).
+
+	If we write \( \lvert R_{11} \rvert  \) as \( \lvert R^{(1)} \rvert\), we get the expression \( 0 \leq \lvert R \rvert \leq R^{(1)} \).
+
+	Here \( R^{(i_{1}, i_{2}, \dots, i_{k})}\) for some \( \{i_{1}, i_{2}, \dots, i_{k} \} \subset \{1, 2, \dots, p\} \), denotes the submatrix of \( R \) obtained by deleting \( i_{1}th, i_{2}th, \dots, i_{k}th \) rows and columns. This notation is used in further derivations as well.
+	% Note: \( \lvert R^{(12\dots p-1)} \rvert = r_{pp} = 1 \). 
+
+ Proceeding this way, we get the following expression due to symmetry.
+ \[ 0 \leq \lvert R \rvert \leq \lvert R^{(1)} \rvert \leq \lvert R^{(12)} \rvert \leq \dots \leq \lvert R^{(12\dots p-1)} \rvert = r_{pp} = 1\] 
+
+ \item More the predictor variables more the multiple correlation coefficient. \begin{equation}
+ 	r_{\regsub} \geq r_{1.23\dots p-1}
+ \end{equation}
+ \begin{proof}
+	 If \( x_{1} \) is regressed on \( x_{2}, x_{3}, \dots, x_{p} \), then from \eqref{mul_cor1} we have, \( r_{\regsub}^{2} = \frac{\Var(X_{\regsub})}{\Var(x_{1})} \).
+
+	 Similarly \footnote{Although this relationship is explicitly derived for $x_1$ regressed on $x_2, x_3, \dots, x_p$, an analogous expression holds for any arbitrary choice of dependent and predictor variables through a suitable selection and permutation of indices. This general applicability is assumed hereafter.}, if \( x_{1} \) is regressed on \( x_{2}, x_{3}, \dots, x_{p-1} \), \( r_{1.23\dots p-1}^{2} = \frac{\Var(X_{1.23\dots p-1})}{\Var(x_{1})} \)
+	 
+	 Thus it is good enough to prove that \( \Var(X_{\regsub}) \geq \Var(X_{1.23\dots p-1}) \).
+	 
+	 But from \eqref{var_split_eq} we have, \( \Var(X_{\regsub}) + \Var(e_{\regsub}) = \Var(x_{1}) = \Var(X_{1.23\dots p-1}) + \Var(e_{1.23\dots p-1})\). 
+
+	 Hence it is sufficient to prove that \( \Var(e_{\regsub}) \leq \Var(e_{1.23\dots p-1}) \)
+
+	 \begin{align*}
+		 \Var(e_{\regsub}) &= \frac{1}{n} SSE = \frac{1}{n} \min \sum_{\alpha=1}^{n} e_{\regsub \alpha}^{2} \\
+				   &= \frac{1}{n} \min \sum_{\alpha=1}^{n} \left( x_{1\alpha} - x_{\regsub \alpha} \right) ^{2} \\
+				   &= \frac{1}{n} \min_{a_{0}, a_{2}, \dots, a_{p}} \sum_{\alpha=1}^{n} \left\{ (x_{1\alpha} - a_{0}) 
+				   - \sum_{j=2}^{p} a_{j} \left( x_{j\alpha} - \bar{x}_{j} \right) \right\} ^{2} \\
+				   & \leq \frac{1}{n} \min_{a_{0}, a_{2}, \dots, a_{p-1}} \sum_{\alpha=1}^{n} \left\{ (x_{1\alpha} - a_{0}) 
+				   - \sum_{j=2}^{p-1} a_{j} \left( x_{j\alpha} - \bar{x}_{j} \right) \right\} ^{2} \footnotemark \\
+				   &= \Var(e_{1.23\dots p-1}) \\
+		 \therefore \Var(e_{\regsub}) & \leq \Var(e_{1.23\dots p-1})
+	 \end{align*}
+	 \footnotetext{Here we have just taken \( \hat{a}_{p} = 0 \). This may or may not be the least square estimator of \( a_{p} \). Hence by definition this approximation is greater than or equal to SSE.}
+ \end{proof}
+ 
+\end{enumerate}
+
+\section*{Partial Correlation Coefficient}
+When we are interested in the correlation between two variables, eliminating the effects of the rest of the variables (under multivariate set-up), we use \textit{partial correlation coefficient}.
+
+\subsection*{Example}
+Consider cholesterol level and bank balance for adults. A positive
+correlation between these two factors is often observed. That is, as
+the bank balance increases, cholesterol level also increases. But this
+is not a correct relationship as Cholesterol level can also increase
+as age increases. Also as age increases, the bank balance may also
+increase because a person can save from his salary over the years.
+Thus there is age factor which influences both cholesterol level and
+bank balance. Suppose we want to know only the correlation
+between cholesterol and bank balance without the age influence,
+we could take persons from the same age group and thus control
+age, but if this is not possible we can statistically control the age
+factor and thus remove its influence on both cholesterol and bank
+balance. This if done is called partial correlation. That is, we can
+use partial correlation for doing the same.
+
+\subsection*{Definition}
+Let us define the linear models to be \( x_{1} = X_{1.34\dots p} + e_{1.34\dots p} \) and \( x_{2} = X_{2.34\dots p} + e_{2.34\dots p}\) 
+
+Then the partial correlation of \( x_{1} \) and \( x_{2} \) eliminating the effect of other variables \( x_{3}, x_{4}, \dots, x_{p} \), denoted as \( r_{12.34\dots p} \) is defined as follows
+\begin{equation}
+	r_{12.34\dots p} = \frac{\Cov(e_{1.34\dots p}, e_{2.34\dots p})}{\sqrt{\Var(e_{1.34\dots p})}\sqrt{\Var(e_{2.34\dots p})}}
+\end{equation}
+where,
+\begin{align*}
+	X_{1.34\dots p} &= \bar{x}_{1} + \sum_{j=3}^{p} \hat{b}_{j}^{(2)}( x_{j} - \bar{x}_{j} ), \quad \hat{b}_{j}^{(2)} = -\frac{s _{1}}{s _{j}} \frac{R_{1j}^{(2)}}{R_{11}^{(2)}}, \quad j = 3, 4, \dots, p \\
+	X_{2.34\dots p} &= \bar{x}_{2} + \sum_{j=3}^{p} \hat{b}_{j}^{(1)}( x_{j} - \bar{x}_{j} ), \quad \hat{b}_{j}^{(1)} = -\frac{s _{2}}{s _{j}} \frac{R_{2j}^{(1)}}{R_{22}^{(1)}}, \quad j = 3, 4, \dots, p 
+\end{align*}
+
+\subsection*{Derivation of the Expression for \( \mathbf{r_{12.34\dots p}} \)}
+
+\begin{equation}
+	\Cov(e_{1.34\dots p}, x_j) = 0, \quad \forall j = 3, 4, \dots, p \label{pred_indep_error} \ \footnotemark
+\end{equation}
+\footnotetext{This is one of the most intuitively beautiful results from all of these derivations. Basically it says that the linear relation between a predictor and residuals is zero. Of course, if it were not the case we could have better adjusted the partial regression coefficient of that predictor to reduce the linearity between them.}
+
+\begin{proof}
+    \begin{align*}
+    \Cov(e_{1.34\dots p}, x_j) &= \frac{1}{n} \sum_{\alpha=1}^{n} (e_{1.34\dots p \alpha} - \bar{e}_{1.34\dots p})(x_{j\alpha} - \bar{x}_j) \\
+			       &= \frac{1}{n} \sum_{\alpha=1}^{n} e_{1.34\dots p \alpha}(x_{j\alpha} - \bar{x}_j) \tag*{(from \eqref{zero_resid_mean})} \\
+    &= \frac{1}{n} \sum_{\alpha=1}^{n} (x_{1\alpha} - X_{1.34\dots p \alpha})(x_{j\alpha} - \bar{x}_j) \\
+    &= \frac{1}{n} \sum_{\alpha=1}^{n} \left[ \left( x_{1\alpha} - \bar{x}_1 - \sum_{k=3}^{p} \hat{b}_k^{(2)}(x_{k\alpha} - \bar{x}_k) \right) (x_{j\alpha} - \bar{x}_j) \right] \\
+    &= \frac{1}{n} \left\{ \sum_{\alpha=1}^{n} (x_{1\alpha} - \bar{x}_1)(x_{j\alpha} - \bar{x}_j) - \sum_{k=3}^{p} \hat{b}_{k}^{(2)} \sum_{\alpha=1}^{n} (x_{k\alpha} - \bar{x}_k)(x_{j\alpha} - \bar{x}_j) \right\} \\ 
+    &= \frac{1}{n} \left( s_{1j} - \sum_{k=3}^{p} \hat{b}_k^{(2)} s_{kj} \right) \\
+    &= 0 \tag*{(from \eqref{normal_eq})}
+\end{align*}
+\end{proof}
+
+Thus we have, 
+\begin{align*}
+    \Cov(e_{1.34\dots p}, e_{2.34\dots p}) &= \Cov\left( e_{1.34\dots p}, x_2 - \bar{x}_2 - \sum_{j=3}^{p} \hat{b}_j^{(1)}(x_j - \bar{x}_j) \right) \\
+    &= \Cov(e_{1.34\dots p}, x_2) - \sum_{j=3}^{p} \hat{b}_j^{(1)} \Cov(e_{1.34\dots p}, x_j) \footnotemark\\
+    &= \Cov(e_{1.34\dots p}, x_2) \tag*{(from \eqref{pred_indep_error})} \\
+    &= \Cov\left( x_1 - \bar{x}_1 - \sum_{j=3}^{p} \hat{b}_j^{(2)}(x_j - \bar{x}_j), x_2 \right) \\
+    &= \Cov(x_1, x_2) - \sum_{j=3}^{p} \hat{b}_j^{(2)} \Cov(x_2, x_j) \\
+    &= \frac{1}{n} s_{12} + \frac{1}{n} \sum_{j=3}^{p} \left( \frac{s_1}{s_j} \frac{R_{1j}^{(2)}}{R_{11}^{(2)}} \right) s_{2j} \\
+    &= \frac{1}{n} \left\{ s_{12} + \sum_{j=3}^{p} \frac{s_1}{s_j} \frac{R_{1j}^{(2)}}{R_{11}^{(2)}} (s_2 s_j r_{2j}) \right\} \\
+    \implies \Cov(e_{1.34\dots p}, e_{2.34\dots p}) &= \frac{1}{n} \left\{ s_1 s_2 r_{12} +  \sum_{j=3}^{p} s_1 s_2 \frac{R_{1j}^{(2)}}{R_{11}^{(2)}} r_{2j} \right\} \\
+    &= \frac{s_1 s_2}{n R_{11}^{(2)}} \left[ r_{12} R_{11}^{(2)} + \sum_{j=3}^{p} r_{2j} R_{1j}^{(2)} \right] \\
+    &= -\frac{s_1 s_2}{n R_{11}^{(2)}} \cdot R_{12}
+\end{align*}
+\footnotetext{Here we have used the simple fact that \( \Cov(aX+b, Y) = a\Cov(X, Y) \). In particular \( \Cov(b, Y) = 0 \). Here \( \bar{x}_{j} \)'s are constants for every \( j = 1, 2, \dots, p \).}
+
+The last equality follows since
+\[ R_{12} = (-1)^{1+2} 
+\begin{vmatrix}
+	r_{21} & r_{23} & \ldots & r_{2p} \\
+	r_{31} &   1    & \ldots & r_{3p} \\
+	\vdots &  \vdots & \ddots & \vdots \\
+	r_{p1} & r_{p3} & \ldots &   1    \\
+\end{vmatrix}
+= - \left( r_{21}R_{11}^{(2)} + r_{23}R_{13}^{(2)} + r_{24}R_{14}^{(2)} + \dots + r_{2p}R_{1p}^{(2)} \right)
+\] 
+
+We also have from the derivation of \eqref{var_sse_rel} that,
+\[ \Var(e_{1.34\dots p}) = \frac{s_1^{2}}{n}\frac{\lvert R^{(2)} \rvert }{R_{11}^{(2)}} \quad \text{ and } \quad \Var(e_{2.34\dots p}) = \frac{s_2^{2}}{n}\frac{\lvert R^{(1)} \rvert }{R_{22}^{(1)}} \] 
+
+Thus the final expression for partial correlation coefficient is
+\begin{align}
+	r_{12.34\dots p} &= \frac{\Cov(e_{1.34\dots p}, e_{2.34\dots p})}{\sqrt{\Var(e_{1.34\dots p})}\sqrt{\Var(e_{2.34\dots p})}} \notag \\
+			 &= \dfrac{-\dfrac{s_1 s_2 R_{12}}{n R_{11}^{(2)}}}{\sqrt{\dfrac{s_1^{2}}{n} \dfrac{\lvert R^{(2)} \rvert }{\lvert R_{11}^{2} \rvert }} \sqrt{\dfrac{s_2^2}{n} \dfrac{\lvert R^{(1)} \rvert }{\lvert R_{22}^{(1)} \rvert }}} \notag \\
+			 &= \dfrac{-\dfrac{R_{12}}{R_{11}^{(2)}}}{\sqrt{\dfrac{\lvert R^{(2)} \rvert \lvert R^{(1)} \rvert }{R_{11}^{(2)}R_{22}^{(1)}}}} \notag \\
+			 &= \frac{-R_{12}}{\sqrt{\lvert R^{(2)} \rvert \lvert R^{(1)} \rvert }} \tag*{(since \( R_{22}^{(1)} = R_{11}^{(2)} \))} \\
+			 &= \frac{-R_{12}}{\sqrt{R_{11}R_{22}}}
+\end{align}
+
+The last equality follows as \( \lvert R^{(1)} \rvert = R_{11} \) and \( \lvert R^{(2)} \rvert = R_{22} \).
+
+\subsection*{Remarks}
+
+\begin{enumerate}[1.]
+	\item We know, \( \hat{a}_j = b_{1j.2,\dots,j-1, j+1,\dots,p} \) for every \( j = 2, 3, \dots p \).
+
+So, \( b_{12.34\dots p} = -\dfrac{s_1}{s_2}\dfrac{R_{12}}{R_{11}} \) and \( b_{21.34 \dots p} = -\dfrac{s_2}{s_1} \dfrac{R_{21}}{R_{22}} = -\dfrac{s_2}{s_1} \dfrac{R_{12}}{R_{22}} \); \( R_{12} = R_{21} \) since \( R \) is symmetric.
+
+Therefore,
+\[
+	b_{12.34\dots p} \times b_{21.34\dots p} = \frac{R_{12}^{2}}{R_{11}R_{22}} = r_{12.34 \dots p}^{2}
+\]
+	\item Let \( r_{1(2.34\dots p)} \) denote the correlation between \( x_{1} \) and the residual of \( x_{2} \) given \( x_{3}, x_{4} , \dots, x_{p} \). Then
+		\[ r_{1(2.34\dots p)}^{2} \leq r_{12.34\dots p}^{2} \]
+\begin{proof}
+	We have,
+	\begin{align*}
+		\Cov(x_{1}, e_{2.34\dots p}) &= \Cov \left( x_{1} - \bar{x}_{1} - \sum_{j=3}^{p}\hat{a}_{j} (x_{j} - \bar{x}_{j}), e_{2.34\dots p} \right) \tag*{(from \eqref{pred_indep_error})} \\
+					     &= \Cov(x_{1} - X_{1.34\dots p}, e_{2.34\dots p}) \\
+					     &= \Cov(e_{1.34\dots p}, e_{2.34\dots p})
+	\end{align*}
+	
+	Therefore, we have
+	\begin{align*}
+		r_{1(2.34\dots p)} &= \operatorname{Cor}(x_{1}, e_{2.34\dots p}) = \frac{\Cov(x_{1}, e_{2.34\dots p})}{\sqrt{\Var(x_{1})}\sqrt{\Var(e_{2.34\dots p})}} \tag*{(from definition)} \\
+		\implies r_{1(2.34\dots p)}^{2} &= \frac{\Cov^{2}(x_{1}, e_{2.34\dots p})}{\Var(x_1)\Var(e_{2.34\dots p})} \\
+						&= \frac{\Cov^{2}(e_{1.34\dots p}, e_{2.34\dots p})}{\Var(x_1)\Var(e_{2.34\dots p})} \\
+						& \leq \frac{\Cov^{2}(e_{1.34\dots p}, e_{2.34\dots p})}{\left\{ \Var(x_1) - \Var(X_{1.34\dots p}) \right\} \Var(e_{2.34\dots p})} \\
+						&= \frac{\Cov^{2}(e_{1.34\dots p}, e_{2.34\dots p})}{\Var(e_{1.34\dots p})\Var(e_{2.34\dots p})} \tag*{(from \eqref{var_split_eq})} \\
+						&= \operatorname{Cor}^{2} (e_{1.34\dots p}, e_{2.34\dots p}) \\
+						\therefore r_{1(2.34\dots p)}^{2} &\leq r_{12.34\dots p}^{2}
+	\end{align*}
+	
+\end{proof}
+		
+\end{enumerate}
+
+\end{document}
