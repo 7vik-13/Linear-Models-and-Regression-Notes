@@ -1,0 +1,243 @@
+\documentclass[11pt, a4paper]{article} 
+\usepackage[margin = 1in]{geometry} 
+\usepackage[]{amsmath, amssymb, amsfonts, amsthm} 
+\allowdisplaybreaks
+\usepackage[shortlabels]{enumitem} 
+\usepackage[]{mathtools} 
+
+\NewDocumentCommand{\htb}{}{\hat{\beta}}
+\NewDocumentCommand{\Var}{}{\operatorname{Var}}
+\NewDocumentCommand{\rank}{}{\operatorname{rank}}
+\NewDocumentCommand{\ginv}{m}{#1^{-}}
+
+\parindent 0pt
+
+\title{Simple Linear Model}
+\author{Notes by Moutushi Chatterji \LaTeX ed by Sathvik H S}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Model Assumptions and Model Objectives}
+
+Consider the general linear model of the form 
+\begin{equation}
+	Y = X \beta + \varepsilon \label{model_eq}
+\end{equation}
+where 
+\[ Y = 
+\begin{pmatrix}
+    y_{1} \\ 
+    y_{2} \\ 
+    \vdots \\ 
+    y_{n}
+\end{pmatrix}
+\quad
+X = 
+\begin{pmatrix}
+x_{11} & x_{12} & \cdots & x_{1p} \\
+x_{21} & x_{22} & \cdots & x_{2p} \\
+\vdots & \vdots & \ddots & \vdots \\
+x_{n1} & x_{n2} & \cdots & x_{np} 
+\end{pmatrix}
+\quad
+\beta =
+\begin{pmatrix}
+\beta_{1} \\
+\beta_{2} \\
+\vdots \\
+\beta_{p}
+\end{pmatrix}
+\quad
+\varepsilon = 
+\begin{pmatrix}
+    \varepsilon_{1} \\ 
+    \varepsilon_{2} \\ 
+    \vdots \\ 
+    \varepsilon_{n}
+\end{pmatrix}
+\] 
+
+Here \( Y \) is the vector of \( n \) observations, \( \beta \) is the vector of parameters, \( \varepsilon \) is the vector of random errors and \( X \) is the design matrix.
+Both \( X \) and \( \beta \) are fixed.
+\subsection*{Assumptions}
+We assume \( \varepsilon \) to have the following properties:
+\begin{align}
+	\mathbb{E}(\varepsilon) &= 0 \\
+	\Var(\varepsilon) &= \sigma^{2} I_{n}
+\end{align}
+The second assumption implies that \( \varepsilon_{1}, \varepsilon_{2}, \dots, \varepsilon_{n} \) have teh same but unknown variances \( \sigma^{2} \) and are uncorrelated.
+
+\subsection*{Objectives}
+\begin{enumerate}[i)]
+	\item To estimate the unknown parameters \( \beta_{1}, \beta_{2}, \dots \beta_{p} \) is possible OR at least estimate those linear combinations of \( \beta \) that can be estimated.
+	\item To test suitable statistical hypotheses about \( \beta \) OR at least functions of \( \beta \).
+\end{enumerate}
+
+\section*{Derivation}
+The rank of \( X \) is assumed to \( r \) such that \( r \leq \min (n, p) \). If \( r = p \leq n \), the model \eqref{model_eq} is said to be a \textit{full rank model}, otherwise it is called a non full rank model.
+
+Define \( \htb \) as a function of known quantities like \( Y, X, \) etc. such that \( \htb \) is ``close'' to \( \beta \) in some sense. Then, 
+\begin{enumerate}[1.]
+	\item \( e = Y - X\htb \) is the \textit{vector of residuals}.
+	\item \( \varepsilon = Y - X\beta \) is the \textit{vector of errors}.
+\end{enumerate}
+
+One way to obtain \( \htb \) is to use \textit{method of least squares}.
+
+Consider the sum of squares of residuals, i.e, 
+\begin{align*}
+	e'e &= (Y - X\htb)'(Y - X\htb) \\
+	    &= Y'Y - Y'X\htb - \htb'X'Y - \htb'X'X\htb \\
+	    &= Y'Y - 2\htb X'Y + \htb'X'X\htb
+\end{align*}
+The last equality follows since \( Y'X\htb = \htb'X'Y \) as both sides are \( 1 \times 1 \) matrices.
+\[ \implies \frac{\partial }{\partial \htb} (e'e) = -2X'Y + 2(X'X)\htb \] 
+Equating this to \( 0 \) we have, 
+\begin{equation}
+	X'Y = (X'X) \htb \label{normal_eq}
+\end{equation}
+The above collection of equations are called \textit{normal equations}.
+
+When the inverse of \( (X'X) \) exists, we simply have
+\begin{equation}
+	\htb = (X'X)^{-1}X'Y
+\end{equation}
+
+\subsection*{Some Results}
+
+\begin{enumerate}[1.]
+	\item The matrix \( S = X'X \) is a symmetric matrix having same rank as \( X \).
+\begin{proof}
+If a vector \( \alpha \) is orthogonal to the rows of the matrix \( X \), then \( X \alpha = 0 \implies X'X \alpha = 0 \), i.e, \( \alpha \) is orthogonal to the rows of \( X'X \) as well.
+
+Conversely, if \( X'X \alpha = 0 \), then \( \alpha'X'X\alpha = 0\) or \( Z'Z = 0 \) where \( Z = X\alpha \). But \( Z'Z = z_{1}^{2} + z_{2}^{2} + \dots + z_{n}^{2} \) which implies \( Z = X\alpha = 0 \), i.e, \( \alpha \) is orthogonal to the rows of \( X \).
+
+Thus \( X \) and \( X'X \) has the same rank \( r \). This also shows that the row space of \( X \) and row space of \( S = X'X \) are the same.
+\end{proof}
+
+	\item If \( \htb \) be any particular solution to the \eqref{normal_eq}, then it minimizes \( e'e \), the sum of square of residuals.
+\begin{proof}
+Consider any other values of \( \beta \), say \( \beta_{0} \). Then,
+\begin{align*}
+	(Y-X\beta_{0})'(Y-X\beta_{0}) &= (Y - X\htb + X\htb - X\beta_{0})'(Y - X\htb + X\htb - X\beta_{0}) \\
+				      &= (Y - X\htb)'(Y - X\htb) + \left\{ X(\htb - \beta_{0}) \right\} ' (Y-X\htb) \\
+				      &\quad + (Y-X\htb)' \left\{ X(\htb - \beta_{0}) \right\} + \left\{ X(\htb - \beta_{0}) \right\}' \left\{ X(\htb - \beta_{0}) \right\} \\
+				      &= (Y - X\htb)'(Y - X\htb) + (\htb - \beta_{0})'X'(Y-X\htb) \\
+				      &\quad + (Y-X\htb)'X(\htb-\beta_{0}) + \left\{ X(\htb - \beta_{0}) \right\}' \left\{ X(\htb - \beta_{0}) \right\} \\
+				      &= (Y - X\htb)'(Y - X\htb) + (\htb - \beta_{0})'(X'Y - X'X\htb) \\
+				      &\quad + (X'Y - X'X\htb)'(\htb-\beta_{0}) + m'm \tag*{where \( m = X(\htb - \beta_{0}) \)} \\
+				      &= (Y - X\htb)'(Y - X\htb) + m'm \tag*{(from \eqref{normal_eq})} \\
+				      & \geq (Y - X\htb)'(Y - X\htb) \qedhere
+\end{align*}
+\end{proof}
+
+Thus the minimized value can be unambiguously denoted by \( SSE = (Y - X\htb)'(Y - X\htb) \) and stands for \textit{sum of squares due to error}.
+\end{enumerate}
+
+\section*{Generalized Inverse and It's Properties}
+\subsection*{Definition}
+\begin{enumerate}[1.]
+	\item Any \( n \times m \) matrix \( \ginv{A} \) satisying the relation \( A\ginv{A}A = A \) is defined as a \textit{generalized inverse (g-inverse)} of the \( m \times n \) matrix \( A \).
+	\item An \( n \times m \) matrix \( \ginv{A} \) is defined to be a \textit{generalized inverse} of the \( m \times n \) matrix \( A \) if for every \( u \) satisfying \( \rank(A) = \rank(A|u) \), \( \ginv{A}u \) is a solution of the equations \( Ax = u \) for unknown \( u \). 
+		In other words, \( \ginv{A}u \) is a solution of the equations \( Ax = u \) for unknown \( u \) whenever the system is \textit{consistent}.
+\end{enumerate}
+
+\subsection*{Properties}
+Define an \( n \times n \) matrix \( H = \ginv{A}A \). Then, 
+\begin{enumerate}[1.]
+	\item \( AH = A \)
+	\item \( H^{2} = H \)
+	\item \( \operatorname{Tr}(H) = \rank(H) = \rank(A) \)
+\end{enumerate}
+\begin{proof}
+The first two properties follow directly from definition. 
+
+The first equality in property 3 follows as \( H \) is an idempotent matrix (property 2) and is similar to a diagonal matrix containing eigenvalues of \( H \) (spectral theorem). But the only eigenvalues of an idempotent matrix are \( 0 \) and \( 1 \) as the polynomial \( x^2 - x \) annihilates \( H \).
+
+For the second equality, observe that \( \ginv{A} A \alpha = 0 \implies A \ginv{A} A \alpha = 0 \implies A\alpha = 0\) and \( A\alpha = 0 \implies \ginv{A} A \alpha = 0 \) . i.e, if a vector \( \alpha \) is orthogonal to the rows of \( A \), then it is orthogonal to the rows of \( H \) and vice versa. Hence \( \rank{A} = \rank{H} \).
+\end{proof}
+
+\subsection*{General Solution for a System of Homogenous Equations}
+Observe that, \( A(I-H) = A - AH = 0 \), by the first property of g-inverse. i.e, each of the \( n \) columns \( h_{1}, h_{2}, \dots, h_{n} \) of \( I-H \) are orthogonal to the rows of \( A \).
+
+Also, \( (I-H)^{2} = I - H - H + H^{2} = I - H \) by second property of g-inverse. i.e, \( I-H \) is idempotent.\footnote{Let \( R \) be a ring with unity \( 1_{R} \) and \( e \) be an idempotent element of this ring. Then, \( 1_{R} - e \) is also idempotent.}
+This implies \( \rank(I-H) = \operatorname{Tr}(I-H) = \operatorname{Tr}(I) - \operatorname{Tr}(H) = n - r \), where \( r = \rank(A) = \rank(H) \) from third property of g-inverse.
+
+Thus, only \( (n-r) \) of the columns vectors \( h_{1}, h_{2}, \dots, h_{n} \) are linearly independent. Without loss of generality we assume that the first \( (n-r) \) columns of \( I-H \), \( h_{1}, h_{2}, \dots, h_{n-r} \) are linearly independent.
+
+Since \( A \) is an \( m \times n \) matrix of rank \( r \), its rows are \( n \)-vectors and therefore we can find at most \( (n-r) \) linearly independent vectors orthogonal to them. \( h_{1}, h_{2}, \dots, h_{n-r} \) is one such set. If there exists any other vector orthogonal to the rows of \( A \), it must be a linear combination of \( h_{1}, h_{2}, \dots, h_{n-r} \).
+
+Let us now consider a system of homogogenous equations
+\begin{equation}
+	Ax = 0 \label{hom_eq}
+\end{equation}
+
+By definition, \( x \) is orthogonal to the rows of \( A \) and so any vector satisfying \eqref{hom_eq} must be a linear combination of \( h_{1}, h_{2}, \dots, h_{n-r} \).
+This is equivalent to saying that \( x \) will be a linear combination of columns of \( I-H \), \( h_{1}, h_{2}, \dots, h_{n} \), because \( h_{n-r+1}, h_{n-r+2}, \dots, h_{n} \) are linear combinations of \( h_{1}, h_{2}, \dots, h_{n-r} \) themselves.
+
+Therefore, \( x \) must be of the form
+\begin{equation}
+	x = z_{1}h_{1} + z_{2}h_{2} + \dots + z_{n}h_{n} = (h_{1}\ h_{2}\ \dots \ h_{n})z = (I-H)z \label{x_lin_eq}
+\end{equation}
+for some \( z = (z_{1}\ z_{2}\ \dots \ z_{n})' \).\footnote{These \( z_{i} \)'s need not be unique even for a fixed \( x \) as columns of \( I - H \) are not necessarily linearly independent.}
+
+Conversely, if \eqref{x_lin_eq}  holds, \( Ax = A(I-H)z = (A-AH)z = 0 \), by the first property of g-inverse.
+
+This shows that the general solution of \eqref{hom_eq} is given by \( \widetilde{x} = (I-H)z \).
+
+\subsection*{General Solution for a System of Non-Homogenous Equations}
+Consider a consistent system of non-homogenous equations given by
+\begin{equation}
+	Ax = u \label{non_hom_eq}
+\end{equation}
+
+If \( \ginv{A} \) is any g-inverse of \( A \), by definition of \( \ginv{A} \), \( \ginv{A}u \) is a particular solution to \eqref{non_hom_eq}. 
+Thus \( A(x - \ginv{A}u) = u - u = 0 \) is a system of homogenous equations in \( x - \ginv{A}u \).
+The corresponding general solution of this homogenous system is \( \widetilde{x} - \ginv{A}u = (I-H)z \) which implies, the general solution to \eqref{non_hom_eq} is, 
+\begin{equation}
+	\widetilde{x} = \ginv{A}u + (I-H)z \label{gen_sol}
+\end{equation}
+
+\section*{Solution of the Normals Equations (General Form)}
+The normal equations are given by (as seen from \eqref{normal_eq}), 
+\[ X'Y = (X'X) \htb \] 
+A particular solution of these equations will be 
+\[ \htb = \ginv{S}X'Y \] where \( \ginv{S} \) is any g-inverse of \( S= X'X\).
+Thus, the general solution of normal equations will be, 
+\begin{equation}
+	\widetilde{\beta} = \htb + (I-H)z \label{gen_sol}
+\end{equation}
+where \( H = \ginv{S}S \) is a \( p \times p \) matrix.
+
+\subsection*{Some More Results}
+\begin{enumerate}[1., start = 3]
+	\item \( X = XH \)
+\begin{proof}
+	From the first property of g-inverse, we have \( SH = S \).Therefore,
+	\begin{align*}
+		0 &= (I-H)'(S-SH) \\
+		  &= (I-H)'(X'X - X'XH) \\
+		  &= (I-H)'(X'(X-XH)) \\
+		  &= (X(I-H))'(X-XH) \\
+		  &= (X-XH)'(X-XH)
+	\end{align*}
+Note that both the sides of the equality are \( p \times p \) matrices.
+Thus equating the \( i \)th diagonal elements of both sides, we get that the sum of squares of the entries in \( i \)th row of \( (X-XH) \) is zero for every \( i = 1, 2, \dots, p \).
+Thus every element of \( (X-XH) \) is zero.
+\end{proof}
+
+	\item A solution of the normal equations \eqref{normal_eq} is unique iff \( \rank(X) = \rank(X'X) = p \).
+\begin{proof}
+	A solution to the normal equations is unique iff the general solution \eqref{gen_sol} of normal equations doesn't contain the arbitrary vector.
+
+	This happens iff \( I-H = 0 \) i.e, \( I = H = \ginv{S}S \) which happens iff \( S \) is non-singular and has regular inverse \( S^{-1} \). Thus the result follows.
+\end{proof}
+
+
+
+\end{enumerate}
+
+\end{document}
+
