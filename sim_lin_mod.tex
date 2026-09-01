@@ -7,8 +7,11 @@
 
 \NewDocumentCommand{\htb}{}{\hat{\beta}}
 \NewDocumentCommand{\Var}{}{\operatorname{Var}}
+\NewDocumentCommand{\Cov}{}{\operatorname{Cov}}
 \NewDocumentCommand{\rank}{}{\operatorname{rank}}
 \NewDocumentCommand{\ginv}{m}{#1^{-}}
+
+\newtheorem{theorem}{Theorem}
 
 \parindent 0pt
 
@@ -197,7 +200,7 @@ If \( \ginv{A} \) is any g-inverse of \( A \), by definition of \( \ginv{A} \), 
 Thus \( A(x - \ginv{A}u) = u - u = 0 \) is a system of homogenous equations in \( x - \ginv{A}u \).
 The corresponding general solution of this homogenous system is \( \widetilde{x} - \ginv{A}u = (I-H)z \) which implies, the general solution to \eqref{non_hom_eq} is, 
 \begin{equation}
-	\widetilde{x} = \ginv{A}u + (I-H)z \label{gen_sol}
+	\widetilde{x} = \ginv{A}u + (I-H)z \label{old_gen_sol}
 \end{equation}
 
 \section*{Solution of the Normals Equations (General Form)}
@@ -235,9 +238,73 @@ Thus every element of \( (X-XH) \) is zero.
 	This happens iff \( I-H = 0 \) i.e, \( I = H = \ginv{S}S \) which happens iff \( S \) is non-singular and has regular inverse \( S^{-1} \). Thus the result follows.
 \end{proof}
 
-
-
 \end{enumerate}
 
-\end{document}
+\section*{Estimability of a Linear Parametric Function}
+If \( \htb \) is a solution to the normal equations \eqref{normal_eq}, then two difficulties arise from the use of \( \htb \) as estimator of \( \beta \):
+\begin{enumerate}[i)]
+	\item There might exist several solutions for the normal equations \eqref{normal_eq} in general (recall \eqref{x_lin_eq}) and hence \( \htb \) is usually not unique.
+	\item \( \mathbb{E}(\htb) = \mathbb{E}(\ginv{S}X'Y) = \ginv{S}X'X \beta = H\beta \), where \( H = \ginv{S}S \), \( S = X'X \). This implies that \( \htb \) is not unbiased for \( \beta \) in general.
+\end{enumerate}
+This compels us to estimate some linear functions of the elements of \( \beta \), rather than estimating \( \beta \) itself.
 
+\subsection*{Definition}
+A linear parametric function \( \lambda' \beta \) where \( \lambda = (\lambda_{1}\, \lambda_{2}\, \dots\, \lambda_{k})' \) is said to be estimable if there exists at least one linear function of observations \( u'Y \) where \( u = (u_{1}\, u_{2}\, \dots\, u_{n})' \) such that \( \mathbb{E}(u'Y) \) is identically equal to \( \lambda' \beta \).
+
+By ``identically equal to \( \lambda' \beta \)'', we mean equal to \( \lambda' \beta \) whatever may be the value of \( \beta \). We denote this by, \( \mathbb{E}(u'Y) = \lambda' \beta \) and now substituting for \( \mathbb{E}(Y) \) we have
+\begin{align*}
+	u'X\beta &= \lambda' \beta \\
+	\implies u'X &= \lambda'
+\end{align*}
+The implication follows from the identically equal to condition and hence we get that \( \lambda' \) is a linear combination of the rows of \( X \).
+
+\begin{theorem}
+	A necessary and sufficient condition of estimability of a parametric function \( \lambda' \beta \) for the model \eqref{model_eq} is \( \lambda' = \lambda'H \).
+\end{theorem}
+\begin{proof}
+	The necessary part follows from the following sequence of equalities which are direct consequences of Result 3 and the previous implication.
+	\[ \lambda'H = u'XH = u'X = \lambda' \]
+	For the sufficient part, if \( \lambda'H = \lambda' \), then 
+	\[ \lambda' = \lambda' \ginv{S}S = \lambda' \ginv{S} X'X = u'X \] where we can take \( u' = \lambda' \ginv{S} X \).
+	Thus \( \lambda' \) is a linear combination of the rows of \( X \).
+\end{proof}
+
+\section*{Best Linear Unbiased Estimator (BLUE)}
+A linear function \( b'Y \) of the observations \( Y \) in the model \( Y = X\beta + \varepsilon \) is said to be the \textit{best linear unbiased estimator (BLUE)} of a parametric function \( \lambda' \beta \), if it is unbiased for \( \lambda' \beta \) and its variance is the smallest among all linear unbiased estimators of \( \lambda' \beta \).
+
+The \textit{Gauss-Markov Theorem} provides an easy method of obtaining the BLUE of any estimable parametric function \( \lambda' \beta \) of the above model.
+
+\begin{theorem}[Gauss-Markov]
+	For the model \( Y = X\beta + \varepsilon \), \( \mathbb{E}(\varepsilon) = 0 \) and \( \Var(\varepsilon) = \sigma^{2}I \), where \( Y \) is observed, \( X \) is known and \( \beta \), \( \sigma^{2} \) are unknown, the BLUE  of an estimable linear parametric function \( \lambda' \beta \) (with \( \lambda \) known) is \( \lambda' \htb \), \( \htb \) being any solution of the corresponding normal equations \( X'Y = X'X \beta \), which is obtained by minimizing the the quantity \( (Y-X\beta)'(Y-X\beta) \) with respect to the unknown vector \( \beta \).
+\end{theorem}
+\begin{proof}
+	\[ \mathbb{E}(\lambda' \htb) = \mathbb{E}(\lambda' \ginv{S} X'Y) = \lambda' \ginv{S}X'X\beta = \lambda' \ginv{S} S \beta = \lambda' H \beta = \lambda' \beta\]
+	The last equality follows from Theorem 1 due to the estimability of \( \lambda' \beta \). This implies that \( \lambda' \htb \) is an unbiased estimator of \( \lambda' \beta \) and is thus eligible for being BLUE.
+
+	For \( \lambda' \htb \) to be BLUE, we have to prove that the variance of \( \lambda' \htb \) is not larger than any other unbiased estimator of \( \lambda' \beta \).
+
+	Let \( u'Y \) be any other unbiased estimator of \( \lambda' \beta \). Then \( \mathbb{E}(u'Y) = u'X\beta = \lambda' \beta \) implies that \( u'X = \lambda' \) as \( u'Y \) is taken to be a unbiased estimator of \( \lambda' \beta \).
+\begin{align*}
+	\Cov(u'Y - \lambda' \htb, \lambda' \htb) &= \Cov(u'Y - \lambda' \ginv{S}X'Y, \lambda' \ginv{S}X'Y) \\
+						 &= \Cov((u' - \lambda' \ginv{S}X')Y, (\lambda'\ginv{S}X')Y) \\
+						 &= (u'- \lambda'\ginv{S}X') \Var{Y} (\lambda'\ginv{S}X')' \\
+						 &= (u'- \lambda'\ginv{S}X') X(\ginv{S})'\lambda \sigma^{2} \tag*{(\( \Var(Y) = \Var(\varepsilon) = \sigma^{2}I \))} \\
+						 &= (u'X - \lambda'\ginv{S}X'X)(\ginv{S})'\lambda \sigma^{2} \\
+						 &= (\lambda' - \lambda'H)(\ginv{S})'\lambda \sigma^{2} = 0 \tag*{(since \( \lambda' = \lambda'H \))}
+\end{align*}
+
+Using the above and non negativity of variance of a variable, we get the required result.
+\begin{align*}
+u'Y &= (u'Y - \lambda' \htb) + \lambda' \htb \\
+\implies \Var(u'Y) &= \Var(u'Y - \lambda' \htb) + \Var(\lambda' \htb) + 2 \Cov(u'Y - \lambda' \htb, \lambda' \htb) \\
+		   &= \Var(u'Y - \lambda' \htb) + \Var(\lambda' \htb) \\
+	\Var(u'Y)  &\geq \Var(\lambda' \htb) \qedhere
+\end{align*}
+
+
+
+\end{proof}
+
+
+
+\end{document}
