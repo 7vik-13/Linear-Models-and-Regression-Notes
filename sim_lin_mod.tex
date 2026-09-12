@@ -8,6 +8,8 @@
 \NewDocumentCommand{\htb}{}{\hat{\beta}}
 \NewDocumentCommand{\Var}{}{\operatorname{Var}}
 \NewDocumentCommand{\Cov}{}{\operatorname{Cov}}
+\NewDocumentCommand{\Cor}{}{\operatorname{Cor}}
+\NewDocumentCommand{\Tr}{}{\operatorname{Tr}}
 \NewDocumentCommand{\rank}{}{\operatorname{rank}}
 \NewDocumentCommand{\ginv}{m}{#1^{-}}
 
@@ -70,7 +72,7 @@ We assume \( \varepsilon \) to have the following properties:
 	\mathbb{E}(\varepsilon) &= 0 \\
 	\Var(\varepsilon) &= \sigma^{2} I_{n}
 \end{align}
-The second assumption implies that \( \varepsilon_{1}, \varepsilon_{2}, \dots, \varepsilon_{n} \) have teh same but unknown variances \( \sigma^{2} \) and are uncorrelated.
+The second assumption implies that \( \varepsilon_{1}, \varepsilon_{2}, \dots, \varepsilon_{n} \) have the same but unknown variances \( \sigma^{2} \) and are uncorrelated.
 
 \subsection*{Objectives}
 \begin{enumerate}[i)]
@@ -142,7 +144,7 @@ Thus the minimized value can be unambiguously denoted by \( SSE = (Y - X\htb)'(Y
 \section*{Generalized Inverse and It's Properties}
 \subsection*{Definition}
 \begin{enumerate}[1.]
-	\item Any \( n \times m \) matrix \( \ginv{A} \) satisying the relation \( A\ginv{A}A = A \) is defined as a \textit{generalized inverse (g-inverse)} of the \( m \times n \) matrix \( A \).
+	\item Any \( n \times m \) matrix \( \ginv{A} \) satisfying the relation \( A\ginv{A}A = A \) is defined as a \textit{generalized inverse (g-inverse)} of the \( m \times n \) matrix \( A \).
 	\item An \( n \times m \) matrix \( \ginv{A} \) is defined to be a \textit{generalized inverse} of the \( m \times n \) matrix \( A \) if for every \( u \) satisfying \( \rank(A) = \rank(A|u) \), \( \ginv{A}u \) is a solution of the equations \( Ax = u \) for unknown \( u \). 
 		In other words, \( \ginv{A}u \) is a solution of the equations \( Ax = u \) for unknown \( u \) whenever the system is \textit{consistent}.
 \end{enumerate}
@@ -152,7 +154,7 @@ Define an \( n \times n \) matrix \( H = \ginv{A}A \). Then,
 \begin{enumerate}[1.]
 	\item \( AH = A \)
 	\item \( H^{2} = H \)
-	\item \( \operatorname{Tr}(H) = \rank(H) = \rank(A) \)
+	\item \( \Tr(H) = \rank(H) = \rank(A) \)
 \end{enumerate}
 \begin{proof}
 The first two properties follow directly from definition. 
@@ -162,17 +164,17 @@ The first equality in property 3 follows as \( H \) is an idempotent matrix (pro
 For the second equality, observe that \( \ginv{A} A \alpha = 0 \implies A \ginv{A} A \alpha = 0 \implies A\alpha = 0\) and \( A\alpha = 0 \implies \ginv{A} A \alpha = 0 \) . i.e, if a vector \( \alpha \) is orthogonal to the rows of \( A \), then it is orthogonal to the rows of \( H \) and vice versa. Hence \( \rank{A} = \rank{H} \).
 \end{proof}
 
-\subsection*{General Solution for a System of Homogenous Equations}
+\subsection*{General Solution for a System of Homogeneous Equations}
 Observe that, \( A(I-H) = A - AH = 0 \), by the first property of g-inverse. i.e, each of the \( n \) columns \( h_{1}, h_{2}, \dots, h_{n} \) of \( I-H \) are orthogonal to the rows of \( A \).
 
 Also, \( (I-H)^{2} = I - H - H + H^{2} = I - H \) by second property of g-inverse. i.e, \( I-H \) is idempotent.\footnote{Let \( R \) be a ring with unity \( 1_{R} \) and \( e \) be an idempotent element of this ring. Then, \( 1_{R} - e \) is also idempotent.}
-This implies \( \rank(I-H) = \operatorname{Tr}(I-H) = \operatorname{Tr}(I) - \operatorname{Tr}(H) = n - r \), where \( r = \rank(A) = \rank(H) \) from third property of g-inverse.
+This implies \( \rank(I-H) = \Tr(I-H) = \Tr(I) - \Tr(H) = n - r \), where \( r = \rank(A) = \rank(H) \) from third property of g-inverse.
 
 Thus, only \( (n-r) \) of the columns vectors \( h_{1}, h_{2}, \dots, h_{n} \) are linearly independent. Without loss of generality we assume that the first \( (n-r) \) columns of \( I-H \), \( h_{1}, h_{2}, \dots, h_{n-r} \) are linearly independent.
 
 Since \( A \) is an \( m \times n \) matrix of rank \( r \), its rows are \( n \)-vectors and therefore we can find at most \( (n-r) \) linearly independent vectors orthogonal to them. \( h_{1}, h_{2}, \dots, h_{n-r} \) is one such set. If there exists any other vector orthogonal to the rows of \( A \), it must be a linear combination of \( h_{1}, h_{2}, \dots, h_{n-r} \).
 
-Let us now consider a system of homogogenous equations
+Let us now consider a system of homogeneous equations
 \begin{equation}
 	Ax = 0 \label{hom_eq}
 \end{equation}
@@ -190,20 +192,20 @@ Conversely, if \eqref{x_lin_eq}  holds, \( Ax = A(I-H)z = (A-AH)z = 0 \), by the
 
 This shows that the general solution of \eqref{hom_eq} is given by \( \widetilde{x} = (I-H)z \).
 
-\subsection*{General Solution for a System of Non-Homogenous Equations}
-Consider a consistent system of non-homogenous equations given by
+\subsection*{General Solution for a System of Non-Homogeneous Equations}
+Consider a consistent system of non-homogeneous equations given by
 \begin{equation}
 	Ax = u \label{non_hom_eq}
 \end{equation}
 
 If \( \ginv{A} \) is any g-inverse of \( A \), by definition of \( \ginv{A} \), \( \ginv{A}u \) is a particular solution to \eqref{non_hom_eq}. 
-Thus \( A(x - \ginv{A}u) = u - u = 0 \) is a system of homogenous equations in \( x - \ginv{A}u \).
-The corresponding general solution of this homogenous system is \( \widetilde{x} - \ginv{A}u = (I-H)z \) which implies, the general solution to \eqref{non_hom_eq} is, 
+Thus \( A(x - \ginv{A}u) = u - u = 0 \) is a system of homogeneous equations in \( x - \ginv{A}u \).
+The corresponding general solution of this homogeneous system is \( \widetilde{x} - \ginv{A}u = (I-H)z \) which implies, the general solution to \eqref{non_hom_eq} is, 
 \begin{equation}
 	\widetilde{x} = \ginv{A}u + (I-H)z \label{old_gen_sol}
 \end{equation}
 
-\section*{Solution of the Normals Equations (General Form)}
+\section*{Solution of the Normal Equations (General Form)}
 The normal equations are given by (as seen from \eqref{normal_eq}), 
 \[ X'Y = (X'X) \htb \] 
 A particular solution of these equations will be 
@@ -231,11 +233,11 @@ Thus equating the \( i \)th diagonal elements of both sides, we get that the sum
 Thus every element of \( (X-XH) \) is zero.
 \end{proof}
 
-	\item A solution of the normal equations \eqref{normal_eq} is unique iff \( \rank(X) = \rank(X'X) = p \).
+	\item A solution of the normal equations \eqref{normal_eq} is unique if and only if \( \rank(X) = \rank(X'X) = p \).
 \begin{proof}
-	A solution to the normal equations is unique iff the general solution \eqref{gen_sol} of normal equations doesn't contain the arbitrary vector.
+	A solution to the normal equations is unique if and only if the general solution \eqref{gen_sol} of normal equations doesn't contain the arbitrary vector.
 
-	This happens iff \( I-H = 0 \) i.e, \( I = H = \ginv{S}S \) which happens iff \( S \) is non-singular and has regular inverse \( S^{-1} \). Thus the result follows.
+	This happens if and only if \( I-H = 0 \) i.e, \( I = H = \ginv{S}S \) which happens if and only if \( S \) is non-singular and has regular inverse \( S^{-1} \). Thus the result follows.
 \end{proof}
 
 \end{enumerate}
@@ -275,7 +277,7 @@ A linear function \( b'Y \) of the observations \( Y \) in the model \( Y = X\be
 The \textit{Gauss-Markov Theorem} provides an easy method of obtaining the BLUE of any estimable parametric function \( \lambda' \beta \) of the above model.
 
 \begin{theorem}[Gauss-Markov]
-	For the model \( Y = X\beta + \varepsilon \), \( \mathbb{E}(\varepsilon) = 0 \) and \( \Var(\varepsilon) = \sigma^{2}I \), where \( Y \) is observed, \( X \) is known and \( \beta \), \( \sigma^{2} \) are unknown, the BLUE  of an estimable linear parametric function \( \lambda' \beta \) (with \( \lambda \) known) is \( \lambda' \htb \), \( \htb \) being any solution of the corresponding normal equations \( X'Y = X'X \beta \), which is obtained by minimizing the the quantity \( (Y-X\beta)'(Y-X\beta) \) with respect to the unknown vector \( \beta \).
+	For the model \( Y = X\beta + \varepsilon \), \( \mathbb{E}(\varepsilon) = 0 \) and \( \Var(\varepsilon) = \sigma^{2}I \), where \( Y \) is observed, \( X \) is known and \( \beta \), \( \sigma^{2} \) are unknown, the BLUE  of an estimable linear parametric function \( \lambda' \beta \) (with \( \lambda \) known) is \( \lambda' \htb \), \( \htb \) being any solution of the corresponding normal equations \( X'Y = X'X \beta \), which is obtained by minimizing the quantity \( (Y-X\beta)'(Y-X\beta) \) with respect to the unknown vector \( \beta \).
 \end{theorem}
 \begin{proof}
 	\[ \mathbb{E}(\lambda' \htb) = \mathbb{E}(\lambda' \ginv{S} X'Y) = \lambda' \ginv{S}X'X\beta = \lambda' \ginv{S} S \beta = \lambda' H \beta = \lambda' \beta\]
@@ -294,17 +296,98 @@ The \textit{Gauss-Markov Theorem} provides an easy method of obtaining the BLUE 
 \end{align*}
 
 Using the above and non negativity of variance of a variable, we get the required result.
-\begin{align*}
-u'Y &= (u'Y - \lambda' \htb) + \lambda' \htb \\
-\implies \Var(u'Y) &= \Var(u'Y - \lambda' \htb) + \Var(\lambda' \htb) + 2 \Cov(u'Y - \lambda' \htb, \lambda' \htb) \\
-		   &= \Var(u'Y - \lambda' \htb) + \Var(\lambda' \htb) \\
-	\Var(u'Y)  &\geq \Var(\lambda' \htb) \qedhere
-\end{align*}
-
-
-
+\begin{align}
+u'Y &= (u'Y - \lambda' \htb) + \lambda' \htb \notag \\
+\implies \Var(u'Y) &= \Var(u'Y - \lambda' \htb) + \Var(\lambda' \htb) + 2 \Cov(u'Y - \lambda' \htb, \lambda' \htb) \label{var_cov_eq} \\
+		   &= \Var(u'Y - \lambda' \htb) + \Var(\lambda' \htb) \notag \\
+\Var(u'Y)  &\geq \Var(\lambda' \htb) \label{var_geq_eq} 
+\end{align}
 \end{proof}
 
+\subsubsection*{Remark}
+Observe from \eqref{var_cov_eq} that, equality in \eqref{var_geq_eq} holds if and only if \( \Var(u'Y - \lambda' \htb) = 0 \).
+But we have already seen that \( \mathbb{E}(u'Y - \lambda' \htb) = \lambda' \beta - \lambda' \beta = 0 \). Thus the equality in \eqref{var_geq_eq} holds if and only if both expectation and variance of the expression \( u'Y - \lambda' \htb \) are zero. That is \( u'Y \equiv \lambda' \htb \) with probability 1.
 
+If \( \lambda' \htb \) is estimable, \( \lambda' \htb \) is the BLUE and if any other unbiased estimator of \( \lambda' \beta \) has the same variance as \( \lambda' \htb \), it can not be different from \( \lambda' \htb \). In other words, BLUE of an estimable parametric function is unique.
 
+\subsection*{Estimation Space}
+The coefficient vectors of all BLUEs are linear combinations of the columns of \( X \) and conversely. The vector space spanned by the columns of \( X \) is therefore called the \textit{estimation space}.
+
+Since the rank of \( X \) is \( r \), there can be at most \( r \) linearly independent estimable functions and BLUEs.
+
+\begin{theorem}
+For the model \( Y = X\beta + \varepsilon \), the BLUE of every estimable parametric function is a linear combination of the left hand side of the normal equations \( X'Y = X'X \htb \) and conversely, any linear combination of the left hand side of the normal equations is the BLUE of its expected value.
+\end{theorem}
+\begin{proof}
+For the linear model \( Y = X\beta + \varepsilon \) if \( \lambda'\beta \) is estimable, its BLUE is \( \lambda' \htb \) (by Gauss-Markov theorem), which can be written as
+\[ \lambda' \htb = \lambda' \ginv{S}X'Y = L'q \] 
+say, where, \( L' = \lambda' \ginv{S} \) and \( q = X'Y = (q_{1}\, q_{2}\, \dots\, q_{p})'\). The BLUE \( \lambda' \htb \) is thus a linear combination of the left hand side of the  normal equations \( X'Y = X'X \htb \).
+
+Conversely, if we consider a linear combination \( L'q = L_{1}q_{1} + L_{2}q_{2} + \dots + L_{p}q_{p}\) of the left hand side of the normal equations, it is the BLUE of its expected values because,
+ \[ \mathbb{E}(L'q) = \mathbb{E}(L'X'Y) = L'X'X\beta \] and by the Gauss-Markov theorem, the BLUE of \( L'X'X\beta \) is \( L'X'X \htb = L'X'Y = L'q \) where the first equality follows from normal equations.
+\end{proof}
+
+Note: \( L'X'X\beta \) is estimable as the condition of estimability \( L'X'XH = LX'X \) is satisfied as \( X = XH \).
+
+\subsection*{Error Space}
+A linear function of the observations is said to belong to the \textit{error space} if and only if its expected value is identically equal to zero, irrespective of the value of \( \beta \) in the model \( Y = X\beta + \varepsilon \).
+
+\begin{theorem}
+A linear function of observations to the error space if and only if its coefficient vector is orthogonal to the columns of \( X \).
+\end{theorem}
+
+\begin{proof}
+From the definition, if \( b'Y \) belongs to the error space, then \( \mathbb{E}(b'Y) = b'X\beta = 0 \). This implies that \( b'X = 0 \) or equivalently \( X'b = 0 \). i.e, \( b \) is orthogonal to the columns of \( X \).
+
+Conversely, if \( X'b = 0 \) holds, then, \( \mathbb{E}(b'Y) = b'X\beta = 0 \) and hence \( b'Y \) belongs to the error space.
+\end{proof}
+
+\begin{theorem}
+The coefficient vector of any BLUE (when expressed in terms of observations) is orthogonal to the coefficient vector of any linear function of the observations belonging to the error space.
+\end{theorem}
+
+\begin{proof}
+We know that, if \( b'Y \) belongs to the error space, \( b \) is orthogonal to the columns of \( X \). We also know that, the coefficient vector of any BLUE is a linear combination of the columns of \( X \).
+
+Thus, any vector in the estimation space is orthogonal to any vector in the error space and so we say that the error space is orthogonal to estimation space.
+\end{proof}
+
+\begin{theorem}
+If every BLUE is expressed in terms of the observations \( Y \) as \( a'Y \), the coefficient vector \( a \) is a linear combination of the columns of \( X \) and conversely, every linear function \( a'Y \) of the observations such that the coefficient vector \( a \) is a linear combination of the columns of \( X \) is a BLUE of its expected value.
+\end{theorem}
+
+\begin{proof}
+	If \( \lambda'\beta \) is estimable, its BLUE is \( \lambda' \htb = \lambda' \ginv{S}X'Y = a'Y \) (by Gauss-Markov theorem) where \( a = X(\ginv{S})' \lambda = Xl\), say with \( l = (\ginv{S})'\lambda \). This implies \( a \) is a linear combination of the columns of \( X \).
+
+	Conversely, if \( a = Xl \), then \( \mathbb{E}(a'Y) = a'X\beta = l'X'X\beta \). Using Gauss-Markov theorem, normal equations and assumption \( a' = l'X' \) respectively, we get that the BLUE of \( l'X'X\beta \) is \( {l'X'X\htb = l'X'Y = a'Y} \), as required.
+\end{proof}
+
+\subsection*{Remarks}
+\begin{enumerate}[i)]
+	\item Ordinarily, we must check the estimability of \( l'X'X\beta \) before applying the Gauss-Markov theorem, but as \( a'Y \) is a linear function such that its expected value is \( l'X'X\beta \), by definition of estimability, it is estimable.
+	\item The above theorem shows that the coefficient vectors of all BLUE's are linear combnations of columns of \( X \) and vice-versa.
+	\item The vector space spanned by the columns of \( X \) is thus called the \textit{estimation space}.
+	\item Since the rank of \( X \) is \( r \), there are at most \( r \) linearly independent estimable functions or BLUEs.
+	\item Since the estimation space generated by \( X \) has rank \( r \) and since we can find \( n-r \) linearly independent vectors orthogonal to the columns of \( X \) (since every column of \( X \) is a \mbox{\( n \)-component} vector), the rank of the error space is \( n-r \).
+\end{enumerate}
+
+\begin{theorem}
+The covariance between any linear function belonging to the error space and any BLUE is zero.
+\end{theorem}
+
+\begin{proof}
+If \( b'Y \) belongs to the error space and \( \lambda'\htb \) is the BLUE of an estimable function \( \lambda'\beta \), then 
+\begin{align*}
+	\Cov(b'Y, \lambda\beta) &= \Cov(b'Y, \lambda'\ginv{S}X'Y) \\
+				&= b'(\lambda\ginv{S}X')' \sigma^{2} \tag*{(as \( \Var(Y) = \sigma^{2}I \))} \\
+				&= b'X(\ginv{S})'\lambda\sigma^{2} = 0 \tag*{(from Theorem 4.)}
+\end{align*}
+\end{proof}
+
+\subsection*{Projection on the Estimation Space}
+There is another way of looking at the BLUE of an estimable function \( \lambda'\beta \). On account of estimability, there is at least one unbiased estimator \( a'Y \) of \( \lambda'\beta \). The vector \( a' \) can then be split as 
+\[ a' = a'P + a'(I-P) \] 
+where \( P = X\ginv{S}X' \) is \( n \times n \), symmetric and idempotent matrix of rank, \( \rank(P) = \Tr(P) = \Tr(\ginv{S}X'X) = \Tr(H) = r \).
+
+The components \( a'P \) and \( a'(I-P) \) are orthogonal, since \( (a'P)(I-P)'a = a'(P-P^{2})a = 0 \) as \( P^{2} = P \) and \( P' = P \).
 \end{document}
