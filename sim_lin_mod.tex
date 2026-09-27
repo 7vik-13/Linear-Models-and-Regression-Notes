@@ -1,37 +1,36 @@
-\documentclass[11pt, a4paper]{article} 
-\usepackage[margin = 1in]{geometry} 
-\usepackage[]{amsmath, amssymb, amsfonts, amsthm} 
-\allowdisplaybreaks
-\usepackage[shortlabels]{enumitem} 
-\usepackage[]{mathtools} 
+\documentclass[10pt, a4paper]{article} 
+\usepackage[]{notexlite} 
+\usepackage[]{microtype} 
 
 \NewDocumentCommand{\htb}{}{\hat{\beta}}
 \NewDocumentCommand{\Var}{}{\operatorname{Var}}
 \NewDocumentCommand{\Cov}{}{\operatorname{Cov}}
 \NewDocumentCommand{\Cor}{}{\operatorname{Cor}}
-\NewDocumentCommand{\Tr}{}{\operatorname{Tr}}
-\NewDocumentCommand{\rank}{}{\operatorname{rank}}
+\RenewDocumentCommand{\Tr}{}{\operatorname{Tr}}
+\RenewDocumentCommand{\rank}{}{\operatorname{rank}}
 \NewDocumentCommand{\ginv}{m}{#1^{-}}
-
-\newtheorem{theorem}{Theorem}
-
-\parindent 0pt
+\RenewDocumentCommand{\implies}{}{\Rightarrow}
 
 \title{Simple Linear Model}
-\author{Notes by Moutushi Chatterji \LaTeX ed by Sathvik H S}
+\author{Notes by Prof. Moutushi Chatterjee \LaTeX ed by Sathvik H S}
 \date{}
 
 \begin{document}
+\pagenumbering{gobble}
 \maketitle
+\tableofcontents
+\clearpage
+\pagenumbering{arabic}
+\setcounter{page}{1}
 
-\section*{Model Assumptions and Model Objectives}
-
+\section{Model Assumptions and Model Objectives}
+\begin{definition}
 Consider the general linear model of the form 
 \begin{equation}
-	Y = X \beta + \varepsilon \label{model_eq}
+	\mathbf{Y} = \mathbf{X} \beta + \mathbf{\varepsilon} \label{model_eq}
 \end{equation}
 where 
-\[ Y = 
+\[ \mathbf{Y} = 
 \begin{pmatrix}
     y_{1} \\ 
     y_{2} \\ 
@@ -39,7 +38,7 @@ where
     y_{n}
 \end{pmatrix}
 \quad
-X = 
+\mathbf{X} = 
 \begin{pmatrix}
 x_{11} & x_{12} & \cdots & x_{1p} \\
 x_{21} & x_{22} & \cdots & x_{2p} \\
@@ -55,101 +54,109 @@ x_{n1} & x_{n2} & \cdots & x_{np}
 \beta_{p}
 \end{pmatrix}
 \quad
-\varepsilon = 
+\mathbf{\varepsilon} = 
 \begin{pmatrix}
-    \varepsilon_{1} \\ 
-    \varepsilon_{2} \\ 
+    \mathbf{\varepsilon}_{1} \\ 
+    \mathbf{\varepsilon}_{2} \\ 
     \vdots \\ 
-    \varepsilon_{n}
+    \mathbf{\varepsilon}_{n}
 \end{pmatrix}
 \] 
 
-Here \( Y \) is the vector of \( n \) observations, \( \beta \) is the vector of parameters, \( \varepsilon \) is the vector of random errors and \( X \) is the design matrix.
-Both \( X \) and \( \beta \) are fixed.
-\subsection*{Assumptions}
-We assume \( \varepsilon \) to have the following properties:
+Here \( \mathbf{Y} \) is the vector of \( n \) observations, \( \beta \) is the vector of parameters, \( \mathbf{\varepsilon} \) is the vector of random errors and \( \mathbf{X} \) is the design matrix.
+Both \( \mathbf{X} \) and \( \beta \) are fixed.
+\end{definition}
+
+\begin{assumptions}
+We assume \( \mathbf{\varepsilon} \) to have the following properties:
 \begin{align}
-	\mathbb{E}(\varepsilon) &= 0 \\
-	\Var(\varepsilon) &= \sigma^{2} I_{n}
+	\mathbb{E}(\mathbf{\varepsilon}) &= 0 \\
+	\Var(\mathbf{\varepsilon}) &= \sigma^{2} I_{n}
 \end{align}
-The second assumption implies that \( \varepsilon_{1}, \varepsilon_{2}, \dots, \varepsilon_{n} \) have the same but unknown variances \( \sigma^{2} \) and are uncorrelated.
+\end{assumptions}
 
-\subsection*{Objectives}
-\begin{enumerate}[i)]
-	\item To estimate the unknown parameters \( \beta_{1}, \beta_{2}, \dots \beta_{p} \) is possible OR at least estimate those linear combinations of \( \beta \) that can be estimated.
-	\item To test suitable statistical hypotheses about \( \beta \) OR at least functions of \( \beta \).
-\end{enumerate}
+The second assumption implies that \( \mathbf{\varepsilon}_{1}, \mathbf{\varepsilon}_{2}, \dots, \mathbf{\varepsilon}_{n} \) have the same but unknown variances \( \sigma^{2} \) and are uncorrelated.
 
-\section*{Derivation}
-The rank of \( X \) is assumed to \( r \) such that \( r \leq \min (n, p) \). If \( r = p \leq n \), the model \eqref{model_eq} is said to be a \textit{full rank model}, otherwise it is called a non full rank model.
-
-Define \( \htb \) as a function of known quantities like \( Y, X, \) etc. such that \( \htb \) is ``close'' to \( \beta \) in some sense. Then, 
+\begin{objectives}
 \begin{enumerate}[1.]
-	\item \( e = Y - X\htb \) is the \textit{vector of residuals}.
-	\item \( \varepsilon = Y - X\beta \) is the \textit{vector of errors}.
+	\item To estimate the unknown parameters \( \beta_{1}, \beta_{2}, \dots \beta_{p} \) is possible or at least estimate those linear combinations of \( \beta \) that can be estimated.
+	\item To test suitable statistical hypotheses about \( \beta \) or at least functions of \( \beta \).
 \end{enumerate}
+\end{objectives}
 
-One way to obtain \( \htb \) is to use \textit{method of least squares}.
+\subsection{Derivation}
+The rank of \( \mathbf{X} \) is assumed to \( r \) such that \( r \leq \min (n, p) \). If \( r = p \leq n \), the model \eqref{model_eq} is said to be a \textit{full rank model}, otherwise it is called a non full rank model.
 
+\begin{definition}
+Define \( \htb \) as a function of known quantities like \( \mathbf{Y}, \mathbf{X}, \) etc. such that \( \htb \) is ``close'' to \( \beta \) in some sense. Then, 
+\begin{enumerate}[1.]
+	\item \( e = \mathbf{Y} - \mathbf{X}\htb \) is the \textit{vector of residuals}.
+	\item \( \mathbf{\varepsilon} = \mathbf{Y} - \mathbf{X}\beta \) is the \textit{vector of errors}.
+\end{enumerate}
+\end{definition}
+
+
+One way to obtain \( \htb \) is to use \textit{method of least squares}. 
 Consider the sum of squares of residuals, i.e, 
 \begin{align*}
-	e'e &= (Y - X\htb)'(Y - X\htb) \\
-	    &= Y'Y - Y'X\htb - \htb'X'Y - \htb'X'X\htb \\
-	    &= Y'Y - 2\htb X'Y + \htb'X'X\htb
+	e'e &= (\mathbf{Y} - \mathbf{X}\htb)'(\mathbf{Y} - \mathbf{X}\htb) \\
+	    &= \mathbf{Y}'\mathbf{Y} - \mathbf{Y}'\mathbf{X}\htb - \htb'\mathbf{X}'\mathbf{Y} - \htb'\mathbf{X}'\mathbf{X}\htb \\
+	    &= \mathbf{Y}'\mathbf{Y} - 2\htb \mathbf{X}'\mathbf{Y} + \htb'\mathbf{X}'\mathbf{X}\htb
 \end{align*}
-The last equality follows since \( Y'X\htb = \htb'X'Y \) as both sides are \( 1 \times 1 \) matrices.
-\[ \implies \frac{\partial }{\partial \htb} (e'e) = -2X'Y + 2(X'X)\htb \] 
+The last equality follows since \( \mathbf{Y}'\mathbf{X}\htb = \htb'\mathbf{X}'\mathbf{Y} \) as both sides are \( 1 \times 1 \) matrices.
+\[ \implies \frac{\partial }{\partial \htb} (e'e) = -2\mathbf{X}'\mathbf{Y} + 2(\mathbf{X}'\mathbf{X})\htb \] 
 Equating this to \( 0 \) we have, 
 \begin{equation}
-	X'Y = (X'X) \htb \label{normal_eq}
+	\mathbf{X}'\mathbf{Y} = (\mathbf{X}'\mathbf{X}) \htb \label{normal_eq}
 \end{equation}
 The above collection of equations are called \textit{normal equations}.
 
-When the inverse of \( (X'X) \) exists, we simply have
+When the inverse of \( (\mathbf{X}'\mathbf{X}) \) exists, we simply have
 \begin{equation}
-	\htb = (X'X)^{-1}X'Y
+	\htb = (\mathbf{X}'\mathbf{X})^{-1}\mathbf{X}'\mathbf{Y}
 \end{equation}
 
-\subsection*{Some Results}
+\subsection{Some Results}
 
 \begin{enumerate}[1.]
-	\item The matrix \( S = X'X \) is a symmetric matrix having same rank as \( X \).
+	\item The matrix \( S = \mathbf{X}'\mathbf{X} \) is a symmetric matrix having same rank as \( \mathbf{X} \).
 \begin{proof}
-If a vector \( \alpha \) is orthogonal to the rows of the matrix \( X \), then \( X \alpha = 0 \implies X'X \alpha = 0 \), i.e, \( \alpha \) is orthogonal to the rows of \( X'X \) as well.
+If a vector \( \alpha \) is orthogonal to the rows of the matrix \( \mathbf{X} \), then \( \mathbf{X} \alpha = 0 \implies \mathbf{X}'\mathbf{X} \alpha = 0 \), i.e, \( \alpha \) is orthogonal to the rows of \( \mathbf{X}'\mathbf{X} \) as well.
 
-Conversely, if \( X'X \alpha = 0 \), then \( \alpha'X'X\alpha = 0\) or \( Z'Z = 0 \) where \( Z = X\alpha \). But \( Z'Z = z_{1}^{2} + z_{2}^{2} + \dots + z_{n}^{2} \) which implies \( Z = X\alpha = 0 \), i.e, \( \alpha \) is orthogonal to the rows of \( X \).
+Conversely, if \( \mathbf{X}'\mathbf{X} \alpha = 0 \), then \( \alpha'\mathbf{X}'\mathbf{X}\alpha = 0\) or \( Z'Z = 0 \) where \( Z = \mathbf{X}\alpha \). But \( Z'Z = z_{1}^{2} + z_{2}^{2} + \dots + z_{n}^{2} \) which implies \( Z = \mathbf{X}\alpha = 0 \), i.e, \( \alpha \) is orthogonal to the rows of \( \mathbf{X} \).
 
-Thus \( X \) and \( X'X \) has the same rank \( r \). This also shows that the row space of \( X \) and row space of \( S = X'X \) are the same.
+Thus \( \mathbf{X} \) and \( \mathbf{X}'\mathbf{X} \) has the same rank \( r \). This also shows that the row space of \( \mathbf{X} \) and row space of \( S = \mathbf{X}'\mathbf{X} \) are the same.
 \end{proof}
 
 	\item If \( \htb \) be any particular solution to the \eqref{normal_eq}, then it minimizes \( e'e \), the sum of square of residuals.
 \begin{proof}
 Consider any other values of \( \beta \), say \( \beta_{0} \). Then,
 \begin{align*}
-	(Y-X\beta_{0})'(Y-X\beta_{0}) &= (Y - X\htb + X\htb - X\beta_{0})'(Y - X\htb + X\htb - X\beta_{0}) \\
-				      &= (Y - X\htb)'(Y - X\htb) + \left\{ X(\htb - \beta_{0}) \right\} ' (Y-X\htb) \\
-				      &\quad + (Y-X\htb)' \left\{ X(\htb - \beta_{0}) \right\} + \left\{ X(\htb - \beta_{0}) \right\}' \left\{ X(\htb - \beta_{0}) \right\} \\
-				      &= (Y - X\htb)'(Y - X\htb) + (\htb - \beta_{0})'X'(Y-X\htb) \\
-				      &\quad + (Y-X\htb)'X(\htb-\beta_{0}) + \left\{ X(\htb - \beta_{0}) \right\}' \left\{ X(\htb - \beta_{0}) \right\} \\
-				      &= (Y - X\htb)'(Y - X\htb) + (\htb - \beta_{0})'(X'Y - X'X\htb) \\
-				      &\quad + (X'Y - X'X\htb)'(\htb-\beta_{0}) + m'm \tag*{where \( m = X(\htb - \beta_{0}) \)} \\
-				      &= (Y - X\htb)'(Y - X\htb) + m'm \tag*{(from \eqref{normal_eq})} \\
-				      & \geq (Y - X\htb)'(Y - X\htb) \qedhere
+	(\mathbf{Y}-\mathbf{X}\beta_{0})'(\mathbf{Y}-\mathbf{X}\beta_{0}) &= (\mathbf{Y} - \mathbf{X}\htb + \mathbf{X}\htb - \mathbf{X}\beta_{0})'(\mathbf{Y} - \mathbf{X}\htb + \mathbf{X}\htb - \mathbf{X}\beta_{0}) \\
+				      &= (\mathbf{Y} - \mathbf{X}\htb)'(\mathbf{Y} - \mathbf{X}\htb) + \left\{ \mathbf{X}(\htb - \beta_{0}) \right\} ' (\mathbf{Y}-\mathbf{X}\htb) \\
+				      &\quad + (\mathbf{Y}-\mathbf{X}\htb)' \left\{ \mathbf{X}(\htb - \beta_{0}) \right\} + \left\{ \mathbf{X}(\htb - \beta_{0}) \right\}' \left\{ \mathbf{X}(\htb - \beta_{0}) \right\} \\
+				      &= (\mathbf{Y} - \mathbf{X}\htb)'(\mathbf{Y} - \mathbf{X}\htb) + (\htb - \beta_{0})'\mathbf{X}'(\mathbf{Y}-\mathbf{X}\htb) \\
+				      &\quad + (\mathbf{Y}-\mathbf{X}\htb)'\mathbf{X}(\htb-\beta_{0}) + \left\{ \mathbf{X}(\htb - \beta_{0}) \right\}' \left\{ \mathbf{X}(\htb - \beta_{0}) \right\} \\
+				      &= (\mathbf{Y} - \mathbf{X}\htb)'(\mathbf{Y} - \mathbf{X}\htb) + (\htb - \beta_{0})'(\mathbf{X}'\mathbf{Y} - \mathbf{X}'\mathbf{X}\htb) \\
+				      &\quad + (\mathbf{X}'\mathbf{Y} - \mathbf{X}'\mathbf{X}\htb)'(\htb-\beta_{0}) + m'm \tag*{where \( m = \mathbf{X}(\htb - \beta_{0}) \)} \\
+				      &= (\mathbf{Y} - \mathbf{X}\htb)'(\mathbf{Y} - \mathbf{X}\htb) + m'm \tag*{(from \eqref{normal_eq})} \\
+				      & \geq (\mathbf{Y} - \mathbf{X}\htb)'(\mathbf{Y} - \mathbf{X}\htb) \qedhere
 \end{align*}
 \end{proof}
 
-Thus the minimized value can be unambiguously denoted by \( SSE = (Y - X\htb)'(Y - X\htb) \) and stands for \textit{sum of squares due to error}.
+Thus the minimized value can be unambiguously denoted by \( SSE = (\mathbf{Y} - \mathbf{X}\htb)'(\mathbf{Y} - \mathbf{X}\htb) \) and stands for \textit{sum of squares due to error}.
 \end{enumerate}
 
-\section*{Generalized Inverse and It's Properties}
-\subsection*{Definition}
-\begin{enumerate}[1.]
-	\item Any \( n \times m \) matrix \( \ginv{A} \) satisfying the relation \( A\ginv{A}A = A \) is defined as a \textit{generalized inverse (g-inverse)} of the \( m \times n \) matrix \( A \).
-	\item An \( n \times m \) matrix \( \ginv{A} \) is defined to be a \textit{generalized inverse} of the \( m \times n \) matrix \( A \) if for every \( u \) satisfying \( \rank(A) = \rank(A|u) \), \( \ginv{A}u \) is a solution of the equations \( Ax = u \) for unknown \( u \). 
+\section{Generalized Inverse and It's Properties}
+\begin{definition}
+Any \( n \times m \) matrix \( \ginv{A} \) satisfying the relation \( A\ginv{A}A = A \) is defined as a \textit{generalized inverse (g-inverse)} of the \( m \times n \) matrix \( A \).
+\end{definition}
+\begin{definition}
+	An \( n \times m \) matrix \( \ginv{A} \) is defined to be a \textit{generalized inverse} of the \( m \times n \) matrix \( A \) if for every \( u \) satisfying \( \rank(A) = \rank(A|u) \), \( \ginv{A}u \) is a solution of the equations \( Ax = u \) for unknown \( u \). 
 		In other words, \( \ginv{A}u \) is a solution of the equations \( Ax = u \) for unknown \( u \) whenever the system is \textit{consistent}.
-\end{enumerate}
+\end{definition}
 
-\subsection*{Properties}
+\subsection{Properties}
 Define an \( n \times n \) matrix \( H = \ginv{A}A \). Then, 
 \begin{enumerate}[1.]
 	\item \( AH = A \)
@@ -164,10 +171,11 @@ The first equality in property 3 follows as \( H \) is an idempotent matrix (pro
 For the second equality, observe that \( \ginv{A} A \alpha = 0 \implies A \ginv{A} A \alpha = 0 \implies A\alpha = 0\) and \( A\alpha = 0 \implies \ginv{A} A \alpha = 0 \) . i.e, if a vector \( \alpha \) is orthogonal to the rows of \( A \), then it is orthogonal to the rows of \( H \) and vice versa. Hence \( \rank{A} = \rank{H} \).
 \end{proof}
 
-\subsection*{General Solution for a System of Homogeneous Equations}
+\subsection[System of Homogeneous Equations]{General Solution for a System of Homogeneous Equations}
 Observe that, \( A(I-H) = A - AH = 0 \), by the first property of g-inverse. i.e, each of the \( n \) columns \( h_{1}, h_{2}, \dots, h_{n} \) of \( I-H \) are orthogonal to the rows of \( A \).
 
-Also, \( (I-H)^{2} = I - H - H + H^{2} = I - H \) by second property of g-inverse. i.e, \( I-H \) is idempotent.\footnote{Let \( R \) be a ring with unity \( 1_{R} \) and \( e \) be an idempotent element of this ring. Then, \( 1_{R} - e \) is also idempotent.}
+Also, \( (I-H)^{2} = I - H - H + H^{2} = I - H \) by second property of g-inverse. i.e, \( I-H \) is idempotent.
+Note that this is a special case of \( 1_{R} - e \) also being idempotent in a ring \( R \) with unity \( 1_{R} \) and \( e \) an idempotent element of \( R \). 
 This implies \( \rank(I-H) = \Tr(I-H) = \Tr(I) - \Tr(H) = n - r \), where \( r = \rank(A) = \rank(H) \) from third property of g-inverse.
 
 Thus, only \( (n-r) \) of the columns vectors \( h_{1}, h_{2}, \dots, h_{n} \) are linearly independent. Without loss of generality we assume that the first \( (n-r) \) columns of \( I-H \), \( h_{1}, h_{2}, \dots, h_{n-r} \) are linearly independent.
@@ -186,13 +194,14 @@ Therefore, \( x \) must be of the form
 \begin{equation}
 	x = z_{1}h_{1} + z_{2}h_{2} + \dots + z_{n}h_{n} = (h_{1}\ h_{2}\ \dots \ h_{n})z = (I-H)z \label{x_lin_eq}
 \end{equation}
-for some \( z = (z_{1}\ z_{2}\ \dots \ z_{n})' \).\footnote{These \( z_{i} \)'s need not be unique even for a fixed \( x \) as columns of \( I - H \) are not necessarily linearly independent.}
+for some \( z = (z_{1}\ z_{2}\ \dots \ z_{n})' \).
+These \( z_{i} \)'s need not be unique even for a fixed \( x \) as columns of \( I - H \) are not necessarily linearly independent.
 
 Conversely, if \eqref{x_lin_eq}  holds, \( Ax = A(I-H)z = (A-AH)z = 0 \), by the first property of g-inverse.
 
 This shows that the general solution of \eqref{hom_eq} is given by \( \widetilde{x} = (I-H)z \).
 
-\subsection*{General Solution for a System of Non-Homogeneous Equations}
+\subsection[System of Non-Homogeneous Equations]{General Solution for a System of Non-Homogeneous Equations}
 Consider a consistent system of non-homogeneous equations given by
 \begin{equation}
 	Ax = u \label{non_hom_eq}
@@ -205,35 +214,35 @@ The corresponding general solution of this homogeneous system is \( \widetilde{x
 	\widetilde{x} = \ginv{A}u + (I-H)z \label{old_gen_sol}
 \end{equation}
 
-\section*{Solution of the Normal Equations (General Form)}
+\subsection{Solution of the Normal Equations (General Form)}
 The normal equations are given by (as seen from \eqref{normal_eq}), 
-\[ X'Y = (X'X) \htb \] 
+\[ \mathbf{X}'\mathbf{Y} = (\mathbf{X}'\mathbf{X}) \htb \] 
 A particular solution of these equations will be 
-\[ \htb = \ginv{S}X'Y \] where \( \ginv{S} \) is any g-inverse of \( S= X'X\).
+\[ \htb = \ginv{S}\mathbf{X}'\mathbf{Y} \] where \( \ginv{S} \) is any g-inverse of \( S= \mathbf{X}'\mathbf{X}\).
 Thus, the general solution of normal equations will be, 
 \begin{equation}
 	\widetilde{\beta} = \htb + (I-H)z \label{gen_sol}
 \end{equation}
 where \( H = \ginv{S}S \) is a \( p \times p \) matrix.
 
-\subsection*{Some More Results}
-\begin{enumerate}[1., start = 3]
-	\item \( X = XH \)
+\subsection{Some More Results}
+\begin{enumerate}[1., start = 4]
+	\item \( \mathbf{X} = \mathbf{X}H \)
 \begin{proof}
 	From the first property of g-inverse, we have \( SH = S \).Therefore,
 	\begin{align*}
 		0 &= (I-H)'(S-SH) \\
-		  &= (I-H)'(X'X - X'XH) \\
-		  &= (I-H)'(X'(X-XH)) \\
-		  &= (X(I-H))'(X-XH) \\
-		  &= (X-XH)'(X-XH)
+		  &= (I-H)'(\mathbf{X}'\mathbf{X} - \mathbf{X}'\mathbf{X}H) \\
+		  &= (I-H)'(\mathbf{X}'(\mathbf{X}-\mathbf{X}H)) \\
+		  &= (\mathbf{X}(I-H))'(\mathbf{X}-\mathbf{X}H) \\
+		  &= (\mathbf{X}-\mathbf{X}H)'(\mathbf{X}-\mathbf{X}H)
 	\end{align*}
 Note that both the sides of the equality are \( p \times p \) matrices.
-Thus equating the \( i \)th diagonal elements of both sides, we get that the sum of squares of the entries in \( i \)th row of \( (X-XH) \) is zero for every \( i = 1, 2, \dots, p \).
-Thus every element of \( (X-XH) \) is zero.
+Thus equating the \( i \)th diagonal elements of both sides, we get that the sum of squares of the entries in \( i \)th row of \( (\mathbf{X}-\mathbf{X}H) \) is zero for every \( i = 1, 2, \dots, p \).
+Thus every element of \( (\mathbf{X}-\mathbf{X}H) \) is zero.
 \end{proof}
 
-	\item A solution of the normal equations \eqref{normal_eq} is unique if and only if \( \rank(X) = \rank(X'X) = p \).
+	\item A solution of the normal equations \eqref{normal_eq} is unique if and only if \( \rank(\mathbf{X}) = \rank(\mathbf{X}'\mathbf{X}) = p \).
 \begin{proof}
 	A solution to the normal equations is unique if and only if the general solution \eqref{gen_sol} of normal equations doesn't contain the arbitrary vector.
 
@@ -242,104 +251,114 @@ Thus every element of \( (X-XH) \) is zero.
 
 \end{enumerate}
 
-\section*{Estimability of a Linear Parametric Function}
+\section{Estimability of a Linear Parametric Function}
 If \( \htb \) is a solution to the normal equations \eqref{normal_eq}, then two difficulties arise from the use of \( \htb \) as estimator of \( \beta \):
-\begin{enumerate}[i)]
+\begin{enumerate}[1.]
 	\item There might exist several solutions for the normal equations \eqref{normal_eq} in general (recall \eqref{x_lin_eq}) and hence \( \htb \) is usually not unique.
-	\item \( \mathbb{E}(\htb) = \mathbb{E}(\ginv{S}X'Y) = \ginv{S}X'X \beta = H\beta \), where \( H = \ginv{S}S \), \( S = X'X \). This implies that \( \htb \) is not unbiased for \( \beta \) in general.
+	\item \( \mathbb{E}(\htb) = \mathbb{E}(\ginv{S}\mathbf{X}'\mathbf{Y}) = \ginv{S}\mathbf{X}'\mathbf{X} \beta = H\beta \), where \( H = \ginv{S}S \), \( S = \mathbf{X}'\mathbf{X} \). This implies that \( \htb \) is not unbiased for \( \beta \) in general.
 \end{enumerate}
 This compels us to estimate some linear functions of the elements of \( \beta \), rather than estimating \( \beta \) itself.
 
-\subsection*{Definition}
-A linear parametric function \( \lambda' \beta \) where \( \lambda = (\lambda_{1}\, \lambda_{2}\, \dots\, \lambda_{k})' \) is said to be estimable if there exists at least one linear function of observations \( u'Y \) where \( u = (u_{1}\, u_{2}\, \dots\, u_{n})' \) such that \( \mathbb{E}(u'Y) \) is identically equal to \( \lambda' \beta \).
+\begin{definition}
+A linear parametric function \( \lambda' \beta \) where \( \lambda = (\lambda_{1}\, \lambda_{2}\, \dots\, \lambda_{k})' \) is said to be estimable if there exists at least one linear function of observations \( u'\mathbf{Y} \) where \( u = (u_{1}\, u_{2}\, \dots\, u_{n})' \) such that \( \mathbb{E}(u'\mathbf{Y}) \) is identically equal to \( \lambda' \beta \).
+\end{definition}
 
-By ``identically equal to \( \lambda' \beta \)'', we mean equal to \( \lambda' \beta \) whatever may be the value of \( \beta \). We denote this by, \( \mathbb{E}(u'Y) = \lambda' \beta \) and now substituting for \( \mathbb{E}(Y) \) we have
+
+By ``identically equal to \( \lambda' \beta \)'', we mean equal to \( \lambda' \beta \) whatever may be the value of \( \beta \). We denote this by, \( \mathbb{E}(u'\mathbf{Y}) = \lambda' \beta \) and now substituting for \( \mathbb{E}(\mathbf{Y}) \) we have
 \begin{align*}
-	u'X\beta &= \lambda' \beta \\
-	\implies u'X &= \lambda'
+	u'\mathbf{X}\beta &= \lambda' \beta \\
+	\implies u'\mathbf{X} &= \lambda'
 \end{align*}
-The implication follows from the identically equal to condition and hence we get that \( \lambda' \) is a linear combination of the rows of \( X \).
+The implication follows from the identically equal to condition and hence we get that \( \lambda' \) is a linear combination of the rows of \( \mathbf{X} \).
 
 \begin{theorem}
 	A necessary and sufficient condition of estimability of a parametric function \( \lambda' \beta \) for the model \eqref{model_eq} is \( \lambda' = \lambda'H \).
 \end{theorem}
 \begin{proof}
 	The necessary part follows from the following sequence of equalities which are direct consequences of Result 3 and the previous implication.
-	\[ \lambda'H = u'XH = u'X = \lambda' \]
+	\[ \lambda'H = u'\mathbf{X}H = u'\mathbf{X} = \lambda' \]
 	For the sufficient part, if \( \lambda'H = \lambda' \), then 
-	\[ \lambda' = \lambda' \ginv{S}S = \lambda' \ginv{S} X'X = u'X \] where we can take \( u' = \lambda' \ginv{S} X \).
-	Thus \( \lambda' \) is a linear combination of the rows of \( X \).
+	\[ \lambda' = \lambda' \ginv{S}S = \lambda' \ginv{S} \mathbf{X}'\mathbf{X} = u'\mathbf{X} \] where we can take \( u' = \lambda' \ginv{S} \mathbf{X} \).
+	Thus \( \lambda' \) is a linear combination of the rows of \( \mathbf{X} \).
 \end{proof}
 
-\section*{Best Linear Unbiased Estimator (BLUE)}
-A linear function \( b'Y \) of the observations \( Y \) in the model \( Y = X\beta + \varepsilon \) is said to be the \textit{best linear unbiased estimator (BLUE)} of a parametric function \( \lambda' \beta \), if it is unbiased for \( \lambda' \beta \) and its variance is the smallest among all linear unbiased estimators of \( \lambda' \beta \).
+\subsection{Best Linear Unbiased Estimator (BLUE)}
+\begin{definition}
+A linear function \( b'\mathbf{Y} \) of the observations \( \mathbf{Y} \) in the model \( \mathbf{Y} = \mathbf{X}\beta + \mathbf{\varepsilon} \) is said to be the \textit{best linear unbiased estimator (BLUE)} of a parametric function \( \lambda' \beta \), if it is unbiased for \( \lambda' \beta \) and its variance is the smallest among all linear unbiased estimators of \( \lambda' \beta \).
+\end{definition}
+
 
 The \textit{Gauss-Markov Theorem} provides an easy method of obtaining the BLUE of any estimable parametric function \( \lambda' \beta \) of the above model.
 
 \begin{theorem}[Gauss-Markov]
-	For the model \( Y = X\beta + \varepsilon \), \( \mathbb{E}(\varepsilon) = 0 \) and \( \Var(\varepsilon) = \sigma^{2}I \), where \( Y \) is observed, \( X \) is known and \( \beta \), \( \sigma^{2} \) are unknown, the BLUE  of an estimable linear parametric function \( \lambda' \beta \) (with \( \lambda \) known) is \( \lambda' \htb \), \( \htb \) being any solution of the corresponding normal equations \( X'Y = X'X \beta \), which is obtained by minimizing the quantity \( (Y-X\beta)'(Y-X\beta) \) with respect to the unknown vector \( \beta \).
+	For the model \( \mathbf{Y} = \mathbf{X}\beta + \mathbf{\varepsilon} \), \( \mathbb{E}(\mathbf{\varepsilon}) = 0 \) and \( \Var(\mathbf{\varepsilon}) = \sigma^{2}I \), where \( \mathbf{Y} \) is observed, \( \mathbf{X} \) is known and \( \beta \), \( \sigma^{2} \) are unknown, the BLUE  of an estimable linear parametric function \( \lambda' \beta \) (with \( \lambda \) known) is \( \lambda' \htb \), \( \htb \) being any solution of the corresponding normal equations \( \mathbf{X}'\mathbf{Y} = \mathbf{X}'\mathbf{X} \beta \), which is obtained by minimizing the quantity \( (\mathbf{Y}-\mathbf{X}\beta)'(\mathbf{Y}-\mathbf{X}\beta) \) with respect to the unknown vector \( \beta \).
 \end{theorem}
 \begin{proof}
-	\[ \mathbb{E}(\lambda' \htb) = \mathbb{E}(\lambda' \ginv{S} X'Y) = \lambda' \ginv{S}X'X\beta = \lambda' \ginv{S} S \beta = \lambda' H \beta = \lambda' \beta\]
+	\[ \mathbb{E}(\lambda' \htb) = \mathbb{E}(\lambda' \ginv{S} \mathbf{X}'\mathbf{Y}) = \lambda' \ginv{S}\mathbf{X}'\mathbf{X}\beta = \lambda' \ginv{S} S \beta = \lambda' H \beta = \lambda' \beta\]
 	The last equality follows from Theorem 1 due to the estimability of \( \lambda' \beta \). This implies that \( \lambda' \htb \) is an unbiased estimator of \( \lambda' \beta \) and is thus eligible for being BLUE.
 
 	For \( \lambda' \htb \) to be BLUE, we have to prove that the variance of \( \lambda' \htb \) is not larger than any other unbiased estimator of \( \lambda' \beta \).
 
-	Let \( u'Y \) be any other unbiased estimator of \( \lambda' \beta \). Then \( \mathbb{E}(u'Y) = u'X\beta = \lambda' \beta \) implies that \( u'X = \lambda' \) as \( u'Y \) is taken to be a unbiased estimator of \( \lambda' \beta \).
+	Let \( u'\mathbf{Y} \) be any other unbiased estimator of \( \lambda' \beta \). Then \( \mathbb{E}(u'\mathbf{Y}) = u'\mathbf{X}\beta = \lambda' \beta \) implies that \( u'\mathbf{X} = \lambda' \) as \( u'\mathbf{Y} \) is taken to be a unbiased estimator of \( \lambda' \beta \).
 \begin{align*}
-	\Cov(u'Y - \lambda' \htb, \lambda' \htb) &= \Cov(u'Y - \lambda' \ginv{S}X'Y, \lambda' \ginv{S}X'Y) \\
-						 &= \Cov((u' - \lambda' \ginv{S}X')Y, (\lambda'\ginv{S}X')Y) \\
-						 &= (u'- \lambda'\ginv{S}X') \Var{Y} (\lambda'\ginv{S}X')' \\
-						 &= (u'- \lambda'\ginv{S}X') X(\ginv{S})'\lambda \sigma^{2} \tag*{(\( \Var(Y) = \Var(\varepsilon) = \sigma^{2}I \))} \\
-						 &= (u'X - \lambda'\ginv{S}X'X)(\ginv{S})'\lambda \sigma^{2} \\
+	\Cov(u'\mathbf{Y} - \lambda' \htb, \lambda' \htb) &= \Cov(u'\mathbf{Y} - \lambda' \ginv{S}\mathbf{X}'\mathbf{Y}, \lambda' \ginv{S}\mathbf{X}'\mathbf{Y}) \\
+						 &= \Cov((u' - \lambda' \ginv{S}\mathbf{X}')\mathbf{Y}, (\lambda'\ginv{S}\mathbf{X}')\mathbf{Y}) \\
+						 &= (u'- \lambda'\ginv{S}\mathbf{X}') \Var{\mathbf{Y}} (\lambda'\ginv{S}\mathbf{X}')' \\
+						 &= (u'- \lambda'\ginv{S}\mathbf{X}') \mathbf{X}(\ginv{S})'\lambda \sigma^{2} \tag*{(\( \Var(\mathbf{Y}) = \Var(\mathbf{\varepsilon}) = \sigma^{2}I \))} \\
+						 &= (u'\mathbf{X} - \lambda'\ginv{S}\mathbf{X}'\mathbf{X})(\ginv{S})'\lambda \sigma^{2} \\
 						 &= (\lambda' - \lambda'H)(\ginv{S})'\lambda \sigma^{2} = 0 \tag*{(since \( \lambda' = \lambda'H \))}
 \end{align*}
 
 Using the above and non negativity of variance of a variable, we get the required result.
 \begin{align}
-u'Y &= (u'Y - \lambda' \htb) + \lambda' \htb \notag \\
-\implies \Var(u'Y) &= \Var(u'Y - \lambda' \htb) + \Var(\lambda' \htb) + 2 \Cov(u'Y - \lambda' \htb, \lambda' \htb) \label{var_cov_eq} \\
-		   &= \Var(u'Y - \lambda' \htb) + \Var(\lambda' \htb) \notag \\
-\Var(u'Y)  &\geq \Var(\lambda' \htb) \label{var_geq_eq} 
+u'\mathbf{Y} &= (u'\mathbf{Y} - \lambda' \htb) + \lambda' \htb \notag \\
+\implies \Var(u'\mathbf{Y}) &= \Var(u'\mathbf{Y} - \lambda' \htb) + \Var(\lambda' \htb) + 2 \Cov(u'\mathbf{Y} - \lambda' \htb, \lambda' \htb) \label{var_cov_eq} \\
+		   &= \Var(u'\mathbf{Y} - \lambda' \htb) + \Var(\lambda' \htb) \notag \\
+\Var(u'\mathbf{Y})  &\geq \Var(\lambda' \htb) \label{var_geq_eq} 
 \end{align}
 \end{proof}
 
-\subsubsection*{Remark}
-Observe from \eqref{var_cov_eq} that, equality in \eqref{var_geq_eq} holds if and only if \( \Var(u'Y - \lambda' \htb) = 0 \).
-But we have already seen that \( \mathbb{E}(u'Y - \lambda' \htb) = \lambda' \beta - \lambda' \beta = 0 \). Thus the equality in \eqref{var_geq_eq} holds if and only if both expectation and variance of the expression \( u'Y - \lambda' \htb \) are zero. That is \( u'Y \equiv \lambda' \htb \) with probability 1.
+\begin{remark}
+Observe from \eqref{var_cov_eq} that, equality in \eqref{var_geq_eq} holds if and only if \( \Var(u'\mathbf{Y} - \lambda' \htb) = 0 \).
+But we have already seen that \( \mathbb{E}(u'\mathbf{Y} - \lambda' \htb) = \lambda' \beta - \lambda' \beta = 0 \). Thus the equality in \eqref{var_geq_eq} holds if and only if both expectation and variance of the expression \( u'\mathbf{Y} - \lambda' \htb \) are zero. That is \( u'\mathbf{Y} \equiv \lambda' \htb \) with probability 1.
 
 If \( \lambda' \htb \) is estimable, \( \lambda' \htb \) is the BLUE and if any other unbiased estimator of \( \lambda' \beta \) has the same variance as \( \lambda' \htb \), it can not be different from \( \lambda' \htb \). In other words, BLUE of an estimable parametric function is unique.
+\end{remark}
 
-\subsection*{Estimation Space}
-The coefficient vectors of all BLUEs are linear combinations of the columns of \( X \) and conversely. The vector space spanned by the columns of \( X \) is therefore called the \textit{estimation space}.
+\subsection{Estimation Space}
+\begin{definition}
+The coefficient vectors of all BLUEs are linear combinations of the columns of \( \mathbf{X} \) and conversely. The vector space spanned by the columns of \( \mathbf{X} \) is therefore called the \textit{estimation space}.
+\end{definition}
 
-Since the rank of \( X \) is \( r \), there can be at most \( r \) linearly independent estimable functions and BLUEs.
+Since the rank of \( \mathbf{X} \) is \( r \), there can be at most \( r \) linearly independent estimable functions and BLUEs.
 
 \begin{theorem}
-For the model \( Y = X\beta + \varepsilon \), the BLUE of every estimable parametric function is a linear combination of the left hand side of the normal equations \( X'Y = X'X \htb \) and conversely, any linear combination of the left hand side of the normal equations is the BLUE of its expected value.
+For the model \( \mathbf{Y} = \mathbf{X}\beta + \mathbf{\varepsilon} \), the BLUE of every estimable parametric function is a linear combination of the left hand side of the normal equations \( \mathbf{X}'\mathbf{Y} = \mathbf{X}'\mathbf{X} \htb \) and conversely, any linear combination of the left hand side of the normal equations is the BLUE of its expected value.
 \end{theorem}
 \begin{proof}
-For the linear model \( Y = X\beta + \varepsilon \) if \( \lambda'\beta \) is estimable, its BLUE is \( \lambda' \htb \) (by Gauss-Markov theorem), which can be written as
-\[ \lambda' \htb = \lambda' \ginv{S}X'Y = L'q \] 
-say, where, \( L' = \lambda' \ginv{S} \) and \( q = X'Y = (q_{1}\, q_{2}\, \dots\, q_{p})'\). The BLUE \( \lambda' \htb \) is thus a linear combination of the left hand side of the  normal equations \( X'Y = X'X \htb \).
+For the linear model \( \mathbf{Y} = \mathbf{X}\beta + \mathbf{\varepsilon} \) if \( \lambda'\beta \) is estimable, its BLUE is \( \lambda' \htb \) (by Gauss-Markov theorem), which can be written as
+\[ \lambda' \htb = \lambda' \ginv{S}\mathbf{X}'\mathbf{Y} = L'q \] 
+say, where, \( L' = \lambda' \ginv{S} \) and \( q = \mathbf{X}'\mathbf{Y} = (q_{1}\, q_{2}\, \dots\, q_{p})'\). The BLUE \( \lambda' \htb \) is thus a linear combination of the left hand side of the  normal equations \( \mathbf{X}'\mathbf{Y} = \mathbf{X}'\mathbf{X} \htb \).
 
 Conversely, if we consider a linear combination \( L'q = L_{1}q_{1} + L_{2}q_{2} + \dots + L_{p}q_{p}\) of the left hand side of the normal equations, it is the BLUE of its expected values because,
- \[ \mathbb{E}(L'q) = \mathbb{E}(L'X'Y) = L'X'X\beta \] and by the Gauss-Markov theorem, the BLUE of \( L'X'X\beta \) is \( L'X'X \htb = L'X'Y = L'q \) where the first equality follows from normal equations.
+ \[ \mathbb{E}(L'q) = \mathbb{E}(L'\mathbf{X}'\mathbf{Y}) = L'\mathbf{X}'\mathbf{X}\beta \] and by the Gauss-Markov theorem, the BLUE of \( L'\mathbf{X}'\mathbf{X}\beta \) is \( L'\mathbf{X}'\mathbf{X} \htb = L'\mathbf{X}'\mathbf{Y} = L'q \) where the first equality follows from normal equations.
 \end{proof}
 
-Note: \( L'X'X\beta \) is estimable as the condition of estimability \( L'X'XH = LX'X \) is satisfied as \( X = XH \).
+Note: \( L'\mathbf{X}'\mathbf{X}\beta \) is estimable as the condition of estimability \( L'\mathbf{X}'\mathbf{X}H = L\mathbf{X}'\mathbf{X} \) is satisfied as \( \mathbf{X} = \mathbf{X}H \).
 
-\subsection*{Error Space}
-A linear function of the observations is said to belong to the \textit{error space} if and only if its expected value is identically equal to zero, irrespective of the value of \( \beta \) in the model \( Y = X\beta + \varepsilon \).
+\subsection{Error Space}
+\begin{definition}
+A linear function of the observations is said to belong to the \textit{error space} if and only if its expected value is identically equal to zero, irrespective of the value of \( \beta \) in the model \( \mathbf{Y} = \mathbf{X}\beta + \mathbf{\varepsilon} \).
+\end{definition}
 
-\begin{theorem}
-A linear function of observations to the error space if and only if its coefficient vector is orthogonal to the columns of \( X \).
+\begin{theorem}\label{thm:err_ortho}
+A linear function of observations to the error space if and only if its coefficient vector is orthogonal to the columns of \( \mathbf{X} \).
 \end{theorem}
 
 \begin{proof}
-From the definition, if \( b'Y \) belongs to the error space, then \( \mathbb{E}(b'Y) = b'X\beta = 0 \). This implies that \( b'X = 0 \) or equivalently \( X'b = 0 \). i.e, \( b \) is orthogonal to the columns of \( X \).
+From the definition, if \( b'\mathbf{Y} \) belongs to the error space, then \( \mathbb{E}(b'\mathbf{Y}) = b'\mathbf{X}\beta = 0 \). This implies that \( b'\mathbf{X} = 0 \) or equivalently \( \mathbf{X}'b = 0 \). i.e, \( b \) is orthogonal to the columns of \( \mathbf{X} \).
 
-Conversely, if \( X'b = 0 \) holds, then, \( \mathbb{E}(b'Y) = b'X\beta = 0 \) and hence \( b'Y \) belongs to the error space.
+Conversely, if \( \mathbf{X}'b = 0 \) holds, then, \( \mathbb{E}(b'\mathbf{Y}) = b'\mathbf{X}\beta = 0 \) and hence \( b'\mathbf{Y} \) belongs to the error space.
 \end{proof}
 
 \begin{theorem}
@@ -347,28 +366,28 @@ The coefficient vector of any BLUE (when expressed in terms of observations) is 
 \end{theorem}
 
 \begin{proof}
-We know that, if \( b'Y \) belongs to the error space, \( b \) is orthogonal to the columns of \( X \). We also know that, the coefficient vector of any BLUE is a linear combination of the columns of \( X \).
+We know that, if \( b'\mathbf{Y} \) belongs to the error space, \( b \) is orthogonal to the columns of \( \mathbf{X} \). We also know that, the coefficient vector of any BLUE is a linear combination of the columns of \( \mathbf{X} \).
 
 Thus, any vector in the estimation space is orthogonal to any vector in the error space and so we say that the error space is orthogonal to estimation space.
 \end{proof}
 
 \begin{theorem}
-If every BLUE is expressed in terms of the observations \( Y \) as \( a'Y \), the coefficient vector \( a \) is a linear combination of the columns of \( X \) and conversely, every linear function \( a'Y \) of the observations such that the coefficient vector \( a \) is a linear combination of the columns of \( X \) is a BLUE of its expected value.
+If every BLUE is expressed in terms of the observations \( \mathbf{Y} \) as \( a'\mathbf{Y} \), the coefficient vector \( a \) is a linear combination of the columns of \( \mathbf{X} \) and conversely, every linear function \( a'\mathbf{Y} \) of the observations such that the coefficient vector \( a \) is a linear combination of the columns of \( \mathbf{X} \) is a BLUE of its expected value.
 \end{theorem}
 
 \begin{proof}
-	If \( \lambda'\beta \) is estimable, its BLUE is \( \lambda' \htb = \lambda' \ginv{S}X'Y = a'Y \) (by Gauss-Markov theorem) where \( a = X(\ginv{S})' \lambda = Xl\), say with \( l = (\ginv{S})'\lambda \). This implies \( a \) is a linear combination of the columns of \( X \).
+	If \( \lambda'\beta \) is estimable, its BLUE is \( \lambda' \htb = \lambda' \ginv{S}\mathbf{X}'\mathbf{Y} = a'\mathbf{Y} \) (by Gauss-Markov theorem) where \( a = \mathbf{X}(\ginv{S})' \lambda = \mathbf{X}l\), say with \( l = (\ginv{S})'\lambda \). This implies \( a \) is a linear combination of the columns of \( \mathbf{X} \).
 
-	Conversely, if \( a = Xl \), then \( \mathbb{E}(a'Y) = a'X\beta = l'X'X\beta \). Using Gauss-Markov theorem, normal equations and assumption \( a' = l'X' \) respectively, we get that the BLUE of \( l'X'X\beta \) is \( {l'X'X\htb = l'X'Y = a'Y} \), as required.
+	Conversely, if \( a = \mathbf{X}l \), then \( \mathbb{E}(a'\mathbf{Y}) = a'\mathbf{X}\beta = l'\mathbf{X}'\mathbf{X}\beta \). Using Gauss-Markov theorem, normal equations and assumption \( a' = l'\mathbf{X}' \) respectively, we get that the BLUE of \( l'\mathbf{X}'\mathbf{X}\beta \) is \( {l'\mathbf{X}'\mathbf{X}\htb = l'\mathbf{X}'\mathbf{Y} = a'\mathbf{Y}} \), as required.
 \end{proof}
 
-\subsection*{Remarks}
-\begin{enumerate}[i)]
-	\item Ordinarily, we must check the estimability of \( l'X'X\beta \) before applying the Gauss-Markov theorem, but as \( a'Y \) is a linear function such that its expected value is \( l'X'X\beta \), by definition of estimability, it is estimable.
-	\item The above theorem shows that the coefficient vectors of all BLUE's are linear combnations of columns of \( X \) and vice-versa.
-	\item The vector space spanned by the columns of \( X \) is thus called the \textit{estimation space}.
-	\item Since the rank of \( X \) is \( r \), there are at most \( r \) linearly independent estimable functions or BLUEs.
-	\item Since the estimation space generated by \( X \) has rank \( r \) and since we can find \( n-r \) linearly independent vectors orthogonal to the columns of \( X \) (since every column of \( X \) is a \mbox{\( n \)-component} vector), the rank of the error space is \( n-r \).
+\subsection{Remarks}
+\begin{enumerate}[1.]
+	\item Ordinarily, we must check the estimability of \( l'\mathbf{X}'\mathbf{X}\beta \) before applying the Gauss-Markov theorem, but as \( a'\mathbf{Y} \) is a linear function such that its expected value is \( l'\mathbf{X}'\mathbf{X}\beta \), by definition of estimability, it is estimable.
+	\item The above theorem shows that the coefficient vectors of all BLUE's are linear combnations of columns of \( \mathbf{X} \) and vice-versa.
+	\item The vector space spanned by the columns of \( \mathbf{X} \) is thus called the \textit{estimation space}.
+	\item Since the rank of \( \mathbf{X} \) is \( r \), there are at most \( r \) linearly independent estimable functions or BLUEs.
+	\item Since the estimation space generated by \( \mathbf{X} \) has rank \( r \) and since we can find \( n-r \) linearly independent vectors orthogonal to the columns of \( \mathbf{X} \) (since every column of \( \mathbf{X} \) is a \mbox{\( n \)-component} vector), the rank of the error space is \( n-r \).
 \end{enumerate}
 
 \begin{theorem}
@@ -376,18 +395,43 @@ The covariance between any linear function belonging to the error space and any 
 \end{theorem}
 
 \begin{proof}
-If \( b'Y \) belongs to the error space and \( \lambda'\htb \) is the BLUE of an estimable function \( \lambda'\beta \), then 
+If \( b'\mathbf{Y} \) belongs to the error space and \( \lambda'\htb \) is the BLUE of an estimable function \( \lambda'\beta \), then 
 \begin{align*}
-	\Cov(b'Y, \lambda\beta) &= \Cov(b'Y, \lambda'\ginv{S}X'Y) \\
-				&= b'(\lambda\ginv{S}X')' \sigma^{2} \tag*{(as \( \Var(Y) = \sigma^{2}I \))} \\
-				&= b'X(\ginv{S})'\lambda\sigma^{2} = 0 \tag*{(from Theorem 4.)}
+	\Cov(b'\mathbf{Y}, \lambda\beta) &= \Cov(b'\mathbf{Y}, \lambda'\ginv{S}\mathbf{X}'\mathbf{Y}) \\
+				&= b'(\lambda\ginv{S}\mathbf{X}')' \sigma^{2} \tag*{(as \( \Var(\mathbf{Y}) = \sigma^{2}I \))} \\
+				&= b'\mathbf{X}(\ginv{S})'\lambda\sigma^{2} = 0 \tag*{(from Theorem~\ref{thm:err_ortho})}
 \end{align*}
 \end{proof}
 
-\subsection*{Projection on the Estimation Space}
-There is another way of looking at the BLUE of an estimable function \( \lambda'\beta \). On account of estimability, there is at least one unbiased estimator \( a'Y \) of \( \lambda'\beta \). The vector \( a' \) can then be split as 
-\[ a' = a'P + a'(I-P) \] 
-where \( P = X\ginv{S}X' \) is \( n \times n \), symmetric and idempotent matrix of rank, \( \rank(P) = \Tr(P) = \Tr(\ginv{S}X'X) = \Tr(H) = r \).
+\subsection{Projection on the Estimation Space}
+There is another way of looking at the BLUE of an estimable function \( \lambda'\beta \). On account of estimability, there is at least one unbiased estimator \( a'\mathbf{Y} \) of \( \lambda'\beta \). The vector \( a' \) can then be split as 
+\[ a' = a'P + a'(I-P) \label{proj_split}\] 
+where \( P = \mathbf{X}\ginv{S}\mathbf{X}' \) is \( n \times n \), symmetric and idempotent matrix of rank, \( \rank(P) = \Tr(P) = \Tr(\ginv{S}\mathbf{X}'\mathbf{X}) = \Tr(H) = r \).
 
 The components \( a'P \) and \( a'(I-P) \) are orthogonal, since \( (a'P)(I-P)'a = a'(P-P^{2})a = 0 \) as \( P^{2} = P \) and \( P' = P \).
+
+We can express \( a'P \mathbf{Y} \) as
+\[ a'P \mathbf{Y} = a' \mathbf{X}\ginv{S}\mathbf{X}'\mathbf{Y} = a' \mathbf{X} \ginv{S} \mathbf{X}'\mathbf{X}\beta = a'\mathbf{X}H\beta = a'\mathbf{X}\beta = \lambda'\beta \] 
+The second equality follows from normal equations \eqref{normal_eq}. The third equality follows as \( S = \mathbf{X}'\mathbf{X} \) and \( H = \ginv{S}S \) by definition. The last equality follows since \( a'\mathbf{Y} \) being unbiased estimator for \( \lambda'\beta \) means that \( \mathbb{E}(a'\mathbf{Y}) = \lambda'\beta \) which in turn implies that \( a'\mathbf{X} = \lambda' \).
+
+Thus, \( a'P \mathbf{Y} \) is the BLUE of \( \lambda'\beta \) and therefore, the other component \( a'(I-P)\mathbf{Y} \) is a linear function belonging to the error space, due to the orthogonality of \( a'P \) and \( a'(I-P) \).
+Therefore, from \eqref{proj_split} we have that, given an unbiased estimator of a parametric function \( \lambda'\beta \), one can obtain the BLUE using the matrix operator \( P \).
+The operator \( P \) splits \( a'\mathbf{Y} \) as \( a'P \mathbf{Y} \) and \( a'(I-P)\mathbf{Y} \) and discards the latter part, giving the BLUE \( a'P \mathbf{Y} \).
+
+Since \( a'(I-P)\mathbf{Y} \) belongs to the error space, \( \mathbb{E}(a'(I-P)\mathbf{Y}) = 0 \) and provides no information on \( \beta \) and simply inflates the variance of \( a'\mathbf{Y} \).
+
+In general terminalogy, \( a'P \) is the projection of the vector \( a' \) on the vector space of the columns of \( X \). This can be readily seen from \( a'P = a'X\ginv{S}X' = l'X' \) with \( l' = a'X\ginv{S} \). i.e, \( a'P \) is a linear combination of the columns of \( \mathbf{X} \).
+
+The other component \( a'(I-P) \) is orthogonal to the columns of \( \mathbf{X} \) as \( a'(I-P)\mathbf{X} = a'\mathbf{X} - a'\mathbf{X}\ginv{S}\mathbf{X}'\mathbf{X} = a'\mathbf{X} - a'\mathbf{X}H = 0\) since \( \mathbf{X} = \mathbf{X}H \).
+
+Thus, \( a'P \) is the projection of \( a' \) on the estimation space and \( P \) is called the \textit{projection operator}.
+
+\begin{remark}
+If operator \( P \) is applied on \( a'P \mathbf{Y} \), we have \( a'PP \mathbf{Y} = a'P^{2}\mathbf{Y} = a'P \mathbf{Y} \) and the discarded part is \( a'(I-P)P \mathbf{Y} = a'(P - P^{2})\mathbf{Y} = 0 \). 
+i.e, no part of \( a'P \mathbf{Y} \) is discarded even after the projection operator is applied for the second time making it a true BLUE.
+\end{remark}
+
+Since \( a'P \) is the estimation space, its projection on the estimation space is itself.
+This is true for any vector space and projection operator as well.
+
 \end{document}
