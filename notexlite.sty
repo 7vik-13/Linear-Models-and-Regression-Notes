@@ -1,0 +1,309 @@
+% ----------------------------------------------------------------------
+% A modified copy of the NotesTex by Aditya Dhumuntarao : https://github.com/Adhumunt/NotesTeX
+% I found this to be pretty attractive and have tried to keep the same essense as the original.
+% ----------------------------------------------------------------------
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{notexlite}
+
+\RequirePackage{color}
+\RequirePackage[colorlinks=true
+,urlcolor=Maroon
+,anchorcolor=Maroon
+,citecolor=Maroon
+,filecolor=Maroon
+,linkcolor=Maroon
+,menucolor=Maroon
+,linktocpage=true
+,pdfa=true
+,pdfusetitle
+]{hyperref}
+\RequirePackage{needspace}
+
+% ----------------------------------------------------------------------
+%           User Top Level Packages: Required
+% ----------------------------------------------------------------------
+
+\usepackage{fancyhdr,geometry}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[many]{tcolorbox}
+
+% ----------------------------------------------------------------------
+%           User Top Level Packages: Additional & Styling
+% ----------------------------------------------------------------------
+
+\usepackage[T1]{fontenc}                            % Font Styling
+\usepackage{lmodern,mathrsfs}
+
+\usepackage[shortlabels]{enumitem}                  % Enumitem Options
+\setlist{before=\leavevmode\noindent, topsep=0pt}   % nosep also does the same.
+
+\usepackage{mathtools,amsthm,amssymb,amsfonts,bm}   % Math Presets
+\allowdisplaybreaks
+\usepackage{thmtools,amsmath}
+\usepackage{array,tabularx,booktabs}                % Table Presets
+\usepackage{graphicx,wrapfig,float,caption}         % Figure Presets
+\usepackage{setspace,multicol}                      % Text Presets
+\usepackage{tikz,physics}                           % Physics Presets
+
+% ----------------------------------------------------------------------
+%           User Page Preferences 
+% ----------------------------------------------------------------------
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+
+\geometry{a4paper, % Fixing papersize to be a4
+          marginparsep=.02\paperwidth,marginparwidth=.2\paperwidth,
+          inner=.11\paperwidth,voffset=-1in,headheight=.02\paperheight,
+          headsep=10pt, footskip=20pt, margin = 1in}
+
+  \pagestyle{fancy}%
+  \renewcommand{\sectionmark}[1]{\markboth{#1}{}}%
+  \renewcommand{\subsectionmark}[1]{\markright{#1}{}}%
+
+  \fancypagestyle{fancynotes}{%
+    \fancyhf{}%
+    \renewcommand{\headrulewidth}{0.4pt}%
+    \renewcommand{\footrulewidth}{0.4pt}
+    \fancyhead[L]{\textsc{\leftmark}}%
+    \fancyhead[R]{\textit{\rightmark}}%
+    \fancyfoot[C]{\thepage}
+  }%
+  \pagestyle{fancynotes}
+
+\newenvironment{fullpage}
+    {\smallskip\noindent\begin{minipage}
+    {\textwidth+\marginparwidth+\marginparsep}\hrule\smallskip\smallskip}
+    {\hrule\end{minipage}\vspace{.1in}}
+
+% ----------------------------------------------------------------------
+%           User Created Environments 
+% ----------------------------------------------------------------------
+
+\newlength{\spacelength}
+\settowidth{\spacelength}{\normalfont\ }
+
+\declaretheoremstyle[
+    headfont={\bfseries\sffamily\footnotesize},
+    notefont={\normalfont},
+    bodyfont={\normalfont},
+    headpunct={.},
+    headformat={\NAME\ \NUMBER \NOTE},
+    spaceabove=10pt,
+    spacebelow=10pt,
+]{theorem}
+
+\tcolorboxenvironment{theorem}{
+  boxrule=0pt,
+  boxsep=0pt,
+  colback={White!90!Dandelion},
+  enhanced jigsaw, 
+  borderline west={1pt}{0pt}{Dandelion},
+  sharp corners,
+  before skip=10pt,
+  after skip=10pt,
+  left=5pt,
+  right=5pt,
+  breakable,
+}
+
+\declaretheorem[style=theorem]{theorem}
+
+\theoremstyle{theorem}
+\newtheorem{definition}{Definition}
+\tcolorboxenvironment{definition}{
+  boxrule=0pt,
+  boxsep=0pt,
+  colback={White!90!Cerulean},
+  enhanced jigsaw, 
+  borderline west={1pt}{0pt}{Cerulean},
+  sharp corners,
+  before skip=10pt,
+  after skip=10pt,
+  left=5pt,
+  right=5pt,
+  breakable,
+}
+
+\theoremstyle{theorem}
+\newtheorem{proposition}{Proposition}
+\tcolorboxenvironment{proposition}{
+  boxrule=0pt,
+  boxsep=0pt,
+  colback={White!90!gray},
+  enhanced jigsaw, 
+  borderline west={1pt}{0pt}{black},
+  sharp corners,
+  before skip=10pt,
+  after skip=10pt,
+  left=5pt,
+  right=5pt,
+  breakable,
+}
+
+\let\proof\relax
+\let\endproof\relax
+
+\declaretheoremstyle[
+    headfont={\small\scshape},
+    notefont={\normalfont},
+    bodyfont={\normalfont},
+    headpunct={.},
+    headformat={\NAME \NOTE},
+]{proof}
+
+\tcolorboxenvironment{proof}{
+  boxrule=0pt,
+  boxsep=0pt,
+  % tile,
+  blanker,
+  borderline west={1pt}{0pt}{NavyBlue!80!white},
+  before skip=10pt,
+  after skip=10pt,
+  left=5pt,
+  right=5pt,
+  breakable,
+}
+
+\declaretheoremstyle[
+    headfont={\itshape},
+    notefont={\normalfont},
+    bodyfont={\normalfont},
+    headpunct={.},
+    headformat={\NAME \NOTE},
+    spaceabove=10pt,
+    spacebelow=10pt,
+]{claim}
+
+\declaretheorem[
+    style=proof,
+    qed=\qedsymbol]{proof}
+
+
+\theoremstyle{theorem}
+\newtheorem{lemma}{Lemma}
+\tcolorboxenvironment{lemma}{
+  boxrule=0pt,
+  boxsep=0pt,
+  blanker,
+  borderline west={1pt}{0pt}{Red},
+  before skip=10pt,
+  after skip=10pt,
+  sharp corners,
+  left=5pt,
+  right=5pt,
+  breakable,
+}
+
+\theoremstyle{claim}
+\newtheorem{remark}{Remark}
+\newtheorem{assumptions}{Assumptions}
+\newtheorem{objectives}{Objectives}
+\newtheorem{example}{Example}
+\newtheorem{examples}{Examples}
+
+% ----------------------------------------------------------------------
+%           Page layout & Headings
+% ----------------------------------------------------------------------
+\renewcommand{\baselinestretch}{1.0}\normalsize
+\setlength\lineskip{1\p@}
+\setlength\parindent{1.2\parindent}
+\setlength\normallineskip{1\p@}
+\setlength\parskip{0\p@ \@plus \p@}
+\@lowpenalty   51
+\@medpenalty  151
+\@highpenalty 301
+\widowpenalty 1000
+\clubpenalty 1000
+
+\setcounter{topnumber}{4}
+\renewcommand\topfraction{1}
+\setcounter{bottomnumber}{1}
+\renewcommand\bottomfraction{.6}
+\setcounter{totalnumber}{5}
+\renewcommand\textfraction{0}
+\renewcommand\floatpagefraction{1}
+\addtolength\textheight{\topskip}
+
+\marginparpush 6\p@
+\topmargin   .05\paperheight
+
+\setlength\arraycolsep{2\p@}
+\setlength\tabcolsep{6\p@}
+\setlength\arrayrulewidth{.4\p@}
+\setlength\doublerulesep{2\p@}
+\setlength\tabbingsep{\labelsep}
+\skip\@mpfootins = \skip\footins
+\setlength\fboxsep{3\p@}
+\setlength\fboxrule{.4\p@}
+
+% % No dots in the table of contents
+% \renewcommand{\@dotsep}{10000}
+
+% number equations within sections
+% \renewcommand{\theequation}{\thesection.\arabic{equation}}
+\numberwithin{equation}{section}
+
+% make equation hyperlink destinations unique
+% removing this will make \eqref{} point unintended equation
+% eventhough the rendering will be fine.
+\renewcommand{\theHequation}{\theHsection.\arabic{equation}}
+
+%headings style
+\renewcommand\section{\@startsection{section}{1}{\z@}%
+                                   {-3.5ex \@plus -1.3ex \@minus -.7ex}%
+                                   {2.3ex \@plus.4ex \@minus .4ex}%
+                                   {\normalfont\large\bfseries}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+                                   {-2.3ex\@plus -1ex \@minus -.5ex}%
+                                   {1.2ex \@plus .3ex \@minus .3ex}%
+                                   {\normalfont\normalsize\bfseries}}
+\renewcommand\subsubsection{\@startsection{subsubsection}{3}{\z@}%
+                                   {-2.3ex\@plus -1ex \@minus -.5ex}%
+                                   {1ex \@plus .2ex \@minus .2ex}%
+                                   {\normalfont\normalsize\bfseries}}
+\renewcommand\paragraph{\@startsection{paragraph}{4}{\z@}%
+                                   {1.75ex \@plus1ex \@minus.2ex}%
+                                   {-1em}%
+                                   {\normalfont\normalsize\bfseries}}
+\renewcommand\subparagraph{\@startsection{subparagraph}{5}{\parindent}%
+                                   {1.75ex \@plus1ex \@minus .2ex}%
+                                   {-1em}%
+                                   {\normalfont\normalsize\bfseries}}
+
+\RequirePackage{titlesec}
+
+\titleformat{name=\section}[hang]
+{\normalfont\Large\bfseries}
+{\thesection\hspace{0.6em}}
+{0pt}
+{}
+[\vspace{-10pt}\color{Maroon}\rule{\textwidth}{.6pt}]
+
+\titleformat{name=\subsection}[hang]
+{\normalfont\large\bfseries}
+{\thesubsection\hspace{0.6em}}
+{0pt}
+{}
+[\vspace{-5pt}\color{Maroon}\rule{\textwidth}{.6pt}]
+
+\let\oldsection\section
+\renewcommand{\section}{\Needspace{5\baselineskip}\oldsection}
+
+\let\oldsubsection\subsection
+\renewcommand{\subsection}{\Needspace{4\baselineskip}\oldsubsection}
+
+
+%Caption of figure and table
+\def\fnum@figure{\textbf{\figurename\nobreakspace\thefigure}}
+\def\fnum@table{\textbf{\tablename\nobreakspace\thetable}}
+
+\long\def\@makecaption#1#2{%
+  \vskip\abovecaptionskip
+  \sbox\@tempboxa{\small #1. #2}%
+  \ifdim \wd\@tempboxa >\hsize
+    \small #1. #2\par
+  \else
+    \global \@minipagefalse
+    \hb@xt@\hsize{\hfil\box\@tempboxa\hfil}%
+  \fi
+  \vskip\belowcaptionskip}
