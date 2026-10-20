@@ -15,7 +15,6 @@ The notes are based on the source material by Prof. Moutushi Chatterjee. The vis
 ### Topics missing
 These topics may be added based on feedback and demand.
 - Multivariate Normal Distribution
-- General and Weighted Least Squares
 - Generalised Linear Model - Logistic regression
 - Linear Spline Regression
 - Analysis of Variance (ANOVA)
